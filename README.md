@@ -1,5 +1,11 @@
 # Proyecto Final Chill Zone (SGCZ)
 
+![Python](https://img.shields.io/badge/Python-3.12-blue?style=flat-square&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-3.0-green?style=flat-square&logo=flask&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?style=flat-square&logo=mysql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Ready-blue?style=flat-square&logo=docker&logoColor=white)
+![AdminLTE](https://img.shields.io/badge/AdminLTE-3.2-purple?style=flat-square)
+
 ## Resumen Ejecutivo
 
 El **Sistema de Gestión Chill Zone (SGCZ)** es una aplicación web integral diseñada para la administración y reserva de espacios recreativos y de trabajo colaborativo (Coworking) dentro de una institución (ej. universitaria). El sistema permite a los usuarios consultar la disponibilidad de recursos (como mesas de ping pong, futbolines, salas de estudio), realizar reservas, y reportar incidencias. Para los administradores, ofrece herramientas para gestionar el inventario de recursos, controlar el acceso de usuarios, aplicar sanciones por mal uso y configurar parámetros del sistema como horarios y límites de reserva. El objetivo principal es optimizar el uso de las instalaciones compartidas y mantener un control ordenado de las actividades. Además, gracias a su diseño responsivo basado en AdminLTE, el sistema es completamente funcional tanto en dispositivos de escritorio como en móviles, facilitando el acceso desde cualquier lugar.
@@ -93,6 +99,93 @@ Para desplegar y ejecutar este proyecto, se requiere el siguiente entorno:
 *   **Base de Datos**: MySQL 8.0
 *   **Contenedores**: Docker y Docker Compose (opcional, pero recomendado para despliegue rápido).
 
+## Instalación y Ejecución
+
+### Opción 1: Con Docker (Recomendado)
+
+#### Usando Docker Compose
+```bash
+# Clonar el repositorio
+git clone https://github.com/jeremyja28/Proyecto_final_chill_zone.git
+cd Proyecto_final_chill_zone
+
+# Levantar los servicios (Flask + MySQL)
+docker-compose up --build
+```
+**Acceder a la aplicación**: http://localhost:4000
+
+#### Usando imagen Docker existente (con zona horaria Ecuador)
+```bash
+docker run -d -p 4000:4000 \
+  --name practica \
+  --add-host=host.docker.internal:host-gateway \
+  -e DB_HOST=host.docker.internal \
+  -e TZ=America/Guayaquil \
+  -e DB_PORT=3306 \
+  -e DB_USER=root \
+  -e DB_PASSWORD= \
+  jeremya28/practica:0.0.1.RELEASE
+```
+
+> **Nota**: Este comando configura automáticamente la zona horaria de Ecuador (America/Guayaquil) y conecta con MySQL en el host local.
+
+### Opción 2: Instalación Local
+
+#### 1. Clonar el repositorio
+```bash
+git clone https://github.com/jeremyja28/Proyecto_final_chill_zone.git
+cd Proyecto_final_chill_zone/SGCZ-ChillZone
+```
+
+#### 2. Crear entorno virtual e instalar dependencias
+```bash
+# Crear entorno virtual
+python -m venv venv
+
+# Activar entorno virtual
+# En Windows:
+venv\Scripts\activate
+# En Linux/Mac:
+source venv/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
+
+#### 3. Configurar Base de Datos MySQL
+
+**Importar el esquema de la base de datos:**
+```bash
+mysql -u root -p < ../chill_zone_db.sql
+```
+
+**Crear archivo `.env` en la carpeta `SGCZ-ChillZone/`:**
+```env
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=tu_password
+DB_NAME=chill_zone_db
+TZ=America/Guayaquil
+```
+
+#### 4. Ejecutar la aplicación
+```bash
+python app.py
+```
+**Acceder a la aplicación**: http://localhost:4000
+
+### Credenciales de Acceso por Defecto
+
+Después de importar `chill_zone_db.sql`, puedes acceder con las credenciales predeterminadas:
+
+| Rol          | Usuario             | Contraseña    |
+|--------------|---------------------|---------------|
+| Administrador | admin@chill.zone   | admin123      |
+| Usuario      | usuario@chill.zone  | user123       |
+
+> **Importante**: Cambiar las contraseñas predeterminadas en producción.
+
 ## Sistema de Notificaciones
 
 Actualmente, el sistema utiliza **notificaciones visuales en la aplicación** (Flash messages) para informar al usuario sobre el éxito o fallo de sus acciones (ej. "Reserva creada con éxito", "Conflicto de horario").
@@ -116,3 +209,72 @@ El sistema utiliza una base de datos relacional (MySQL) con las siguientes tabla
 *   **`uso`**: Registro detallado del tiempo real de uso de los recursos.
 *   **`reserva_acompanantes`**: Relación de usuarios adicionales que participan en una reserva.
 *   **`incidencia_responsables`**: Relación de usuarios implicados en una incidencia reportada.
+
+## Tecnologías Utilizadas
+
+*   **Backend**: Flask 3.0.3
+*   **Base de Datos**: MySQL 8.0 (via mysql-connector-python 9.0.0)
+*   **Seguridad**: Bcrypt 4.2.0 para hashing de contraseñas
+*   **Formularios**: Flask-WTF 1.2.1 + WTForms 3.1.2
+*   **Frontend**: AdminLTE 3.2.0, Bootstrap, jQuery
+*   **Testing**: pytest 8.3.2
+*   **Contenedores**: Docker + Docker Compose
+*   **Variables de Entorno**: python-dotenv 1.0.1
+
+## Estructura de la Arquitectura
+
+```
+┌──────────────────┐
+│   Templates      │  ← Jinja2 (HTML)
+│   (Frontend)     │
+└────────┬─────────┘
+         │
+┌────────▼─────────┐
+│   Controllers    │  ← Blueprints (Rutas HTTP)
+└────────┬─────────┘
+         │
+┌────────▼─────────┐
+│    Services      │  ← Lógica de Negocio
+└────────┬─────────┘
+         │
+┌────────▼─────────┐
+│  Repositories    │  ← Acceso a Datos (SQL)
+└────────┬─────────┘
+         │
+┌────────▼─────────┐
+│   MySQL DB       │  ← Base de Datos
+└──────────────────┘
+```
+
+## Contribución
+
+Este es un proyecto académico desarrollado para la materia de Ingeniería de Software. Las contribuciones son bienvenidas:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add: nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
+
+## Autores
+
+*   **Equipo de Desarrollo** - *Proyecto Final* - [jeremyja28](https://github.com/jeremyja28)
+
+## Mejoras Futuras
+
+*   [ ] Implementación de notificaciones por correo electrónico
+*   [ ] Sistema de chat en tiempo real para usuarios
+*   [ ] Integración con calendarios externos (Google Calendar, Outlook)
+*   [ ] Aplicación móvil nativa (Android/iOS)
+*   [ ] Sistema de QR para check-in/check-out automático
+*   [ ] Panel de analítica avanzada con gráficos interactivos
+*   [ ] API RESTful documentada con Swagger
+*   [ ] Sistema de pagos para reservas premium
+
+---
+
+**Desarrollado con ❤️ para la comunidad universitaria**

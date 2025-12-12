@@ -1,6 +1,31 @@
 services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: chill_zone_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: chill_zone_db
+      MYSQL_USER: chill_user
+      MYSQL_PASSWORD: chill_pass
+      TZ: America/Guayaquil
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./chill_zone_db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chill_zone_network
+
   flask_app:
     build: .
+    container_name: chill_zone_flask
+    restart: always
     ports:
       - "4000:4000"
     volumes:
@@ -10,3 +35,22 @@ services:
       - FLASK_ENV=development
       - FLASK_RUN_HOST=0.0.0.0
       - PORT=4000
+      - DB_HOST=mysql_db
+      - DB_PORT=3306
+      - DB_USER=chill_user
+      - DB_PASSWORD=chill_pass
+      - DB_NAME=chill_zone_db
+      - TZ=America/Guayaquil
+    depends_on:
+      mysql_db:
+        condition: service_healthy
+    networks:
+      - chill_zone_network
+
+volumes:
+  mysql_data:
+    driver: local
+
+networks:
+  chill_zone_network:
+    driver: bridge
