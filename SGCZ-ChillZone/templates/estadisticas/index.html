@@ -1,0 +1,119 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Estadísticas' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Estadísticas</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item active">Estadísticas</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-info"><div class="inner"><h3>{{ data.recursos.total }}</h3><p>Total recursos</p></div><div class="icon"><i class="fas fa-cubes"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-success"><div class="inner"><h3>{{ data.recursos.disponibles }}</h3><p>Disponibles</p></div><div class="icon"><i class="fas fa-check"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-warning"><div class="inner"><h3>{{ data.recursos.mantenimiento }}</h3><p>Mantenimiento</p></div><div class="icon"><i class="fas fa-tools"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-danger"><div class="inner"><h3>{{ data.recursos.fuera_servicio }}</h3><p>Fuera de servicio</p></div><div class="icon"><i class="fas fa-ban"></i></div></div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Reservas últimos 7 días</h3></div>
+      <div class="card-body">
+        {% if data.reservas_7_dias %}
+          <canvas id="chartReservas" height="180" data-labels='{{ chart_data.reservas.labels|safe }}' data-values='{{ chart_data.reservas.values|safe }}'></canvas>
+        {% else %}
+          <p class="text-muted text-center py-4">No hay reservas en los últimos 7 días</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Top incidencias por recurso</h3></div>
+      <div class="card-body">
+        {% if data.incidencias_top %}
+          <canvas id="chartIncidencias" height="180" data-labels='{{ chart_data.incidencias.labels|safe }}' data-values='{{ chart_data.incidencias.values|safe }}'></canvas>
+        {% else %}
+          <p class="text-muted text-center py-4">No hay incidencias reportadas</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+function renderSimpleChart(elId, type){
+  var el = document.getElementById(elId);
+  if(!el) {
+    console.log('No se encontró elemento:', elId);
+    return;
+  }
+  try {
+    var labelsAttr = el.getAttribute('data-labels');
+    var valuesAttr = el.getAttribute('data-values');
+    console.log(elId + ' - labels:', labelsAttr);
+    console.log(elId + ' - values:', valuesAttr);
+    
+    if(!labelsAttr || !valuesAttr) {
+      console.error('Faltan datos para', elId);
+      return;
+    }
+    
+    var labels = JSON.parse(labelsAttr);
+    var values = JSON.parse(valuesAttr);
+    
+    if(labels.length === 0 || values.length === 0) {
+      console.warn('Datos vacíos para', elId);
+      return;
+    }
+    
+    new Chart(el, {
+      type: type,
+      data: { 
+        labels: labels, 
+        datasets: [{ 
+          label: elId === 'chartReservas' ? 'Reservas' : 'Incidencias', 
+          data: values, 
+          backgroundColor: elId === 'chartReservas' ? 'rgba(54,162,235,0.5)' : 'rgba(255,99,132,0.5)', 
+          borderColor: elId === 'chartReservas' ? 'rgba(54,162,235,1)' : 'rgba(255,99,132,1)', 
+          borderWidth: 2,
+          tension: 0.4
+        }] 
+      },
+      options: { 
+        responsive: true, 
+        maintainAspectRatio: true,
+        scales: { 
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          } 
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          }
+        }
+      }
+    });
+    console.log('✓ Gráfico', elId, 'renderizado correctamente');
+  } catch(e) {
+    console.error('Error renderizando', elId, ':', e);
+  }
+}
+renderSimpleChart('chartReservas','line');
+renderSimpleChart('chartIncidencias','bar');
+</script>
+{% endblock %}

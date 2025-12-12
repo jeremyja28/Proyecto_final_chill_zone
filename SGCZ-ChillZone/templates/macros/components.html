@@ -1,0 +1,23 @@
+{% macro flash_messages() %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+{% endmacro %}
+
+{% macro small_box(color, value, label, icon) %}
+<div class="col-md-3 col-6">
+  <div class="small-box bg-{{ color }}">
+    <div class="inner"><h3>{{ value }}</h3><p>{{ label }}</p></div>
+    <div class="icon"><i class="fas fa-{{ icon }}"></i></div>
+  </div>
+</div>
+{% endmacro %}

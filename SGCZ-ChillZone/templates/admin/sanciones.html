@@ -1,0 +1,67 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<h5>Sanciones</h5>
+<div class="card mb-3">
+  <div class="card-header">Registrar sanción</div>
+  <div class="card-body">
+    <form method="post" class="row g-2">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <div class="col-md-3">
+        <select name="usuario_id" class="form-select" required>
+          <option value="">Seleccione usuario</option>
+          {% for u in usuarios %}
+            <option value="{{ u.id }}">{{ u.nombre }} ({{ u.correo }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <select name="severidad" class="form-select">
+          <option value="LEVE">LEVE</option>
+          <option value="GRAVE">GRAVE</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <input class="form-control" name="dias_bloqueo" type="number" min="0" max="365" value="0" />
+      </div>
+      <div class="col-12">
+        <textarea class="form-control" name="motivo" placeholder="Motivo de la sanción" required></textarea>
+      </div>
+      <div class="col-12"><button class="btn btn-primary">Guardar</button></div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Historial de sanciones</div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <thead><tr><th>Fecha</th><th>Usuario</th><th>Severidad</th><th>Días</th><th>Motivo</th><th>Estado</th><th>Acciones</th></tr></thead>
+      <tbody>
+        {% for s in sanciones %}
+          <tr>
+            <td>{{ s.creado_en }}</td>
+            <td>{{ s.usuario_nombre }}</td>
+            <td>{{ s.severidad }}</td>
+            <td>{{ s.dias_bloqueo }}</td>
+            <td>{{ s.motivo }}</td>
+            <td>{{ s.estado }}</td>
+            <td>
+              <form method="post" action="{{ url_for('sanciones.actualizar', sancion_id=s.id) }}" class="d-flex gap-2">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <select name="estado" class="form-select form-select-sm w-auto">
+                  {% for e in ['ACTIVA','CUMPLIDA','ANULADA'] %}
+                    <option value="{{ e }}" {% if s.estado==e %}selected{% endif %}>{{ e }}</option>
+                  {% endfor %}
+                </select>
+                <button class="btn btn-sm btn-outline-primary">Actualizar</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="7" class="text-center">Sin sanciones</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

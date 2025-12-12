@@ -1,0 +1,47 @@
+:root {
+	--brand-primary: #0d6efd;
+	--brand-secondary: #6c757d;
+	--brand-accent: #20c997;
+}
+
+body {
+	padding-bottom: 40px;
+	background: #f8f9fb;
+}
+
+.navbar {
+	background: linear-gradient(90deg, #0b5ed7, #0dcaf0);
+}
+
+.navbar .nav-link.active { font-weight: 600; }
+
+.logo-brand { height: 28px; width: auto; display: inline-block; }
+
+.card {
+	box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+	border: 1px solid #e9ecef;
+}
+
+.btn-primary {
+	background-color: var(--brand-primary);
+	border-color: var(--brand-primary);
+}
+
+.btn-outline-primary {
+	color: var(--brand-primary);
+	border-color: var(--brand-primary);
+}
+
+.badge {
+	font-weight: 500;
+}
+
+/* Sidebar navigation hover effect */
+.nav-sidebar .nav-link:hover {
+	background-color: rgba(255,255,255,0.1) !important;
+}
+
+.nav-sidebar .nav-link.active {
+	background-color: rgba(255,255,255,0.2) !important;
+	font-weight: 600;
+}

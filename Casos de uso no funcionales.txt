@@ -1,0 +1,464 @@
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-01)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-01
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+El presente documento forma parte del proceso de desarrollo definido por la norma
+ISO/IEC 12207, específicamente dentro de la etapa de especificación y verificación
+de requisitos no funcionales.
+Describe el requisito de rendimiento del sistema (RNF-01), el cual establece que
+todas las operaciones básicas del sistema deben ejecutarse con un tiempo de
+respuesta inferior a 2 segundos, garantizando una experiencia fluida para los
+usuarios del sistema “Chill Zone”.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-01
+Tipo: Rendimiento
+Nombre: Tiempo de respuesta menor a 2 segundos
+Versión: 1.0
+Prioridad: Alta
+Módulos afectados: Autenticación, Reservas, Control de Uso, Reportes,
+Administración
+3. Objetivo
+Garantizar que las operaciones básicas del sistema se ejecuten de forma
+eficiente, con un tiempo de respuesta adecuado que no afecte la experiencia
+del usuario, especialmente en procesos como inicio de sesión, consulta de
+disponibilidad, generación de reportes y gestión de reservas
+Criterios de Evaluación
+Criterio Valor esperado Método de verificación
+Tiempo promedio de
+respuesta
+≤ 2 segundos por
+operación básica
+Medición con
+herramientas de
+monitoreo
+Porcentaje de
+cumplimiento
+≥ 95 % de las
+operaciones dentro del
+límite
+Pruebas automáticas de
+rendimiento
+Usuarios concurrentes Soporte para al menos 20
+usuarios sin degradación
+perceptible
+Pruebas de carga y estrés
+4. Conclusiones
+La integración del requisito RNF-01 dentro del proceso de desarrollo del
+sistema “Chill Zone”, conforme a la norma ISO/IEC 12207, asegura que el
+rendimiento del sistema cumpla con estándares de calidad internacional como
+los definidos en ISO/IEC 25010 (eficiencia del desempeño).
+Este requisito es clave para garantizar una experiencia de usuario fluida,
+especialmente en un entorno universitario donde múltiples estudiantes pueden
+interactuar simultáneamente con el sistema.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-02)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-02
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento forma parte del proceso de desarrollo definido por la norma
+ISO/IEC 12207, dentro de la etapa de especificación de requisitos no funcionales.
+Describe el requisito RNF-02, que establece que el sistema debe estar disponible
+desde cualquier red institucional o externa, permitiendo el acceso remoto a través
+de navegadores compatibles.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-02
+Tipo: Disponibilidad
+Nombre: Acceso desde cualquier red
+Versión: 1.0
+Prioridad: Baja
+Módulos afectados: Autenticación, Reservas, Reportes, Estadísticas
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Accesibilidad 100 % desde redes
+internas y externas
+Pruebas de conexión
+desde distintos entornos
+Tiempo de
+disponibilidad
+≥ 99 % mensual Monitoreo de uptime
+Compatibilidad de red HTTP/HTTPS sin
+restricciones
+Pruebas de acceso desde
+diferentes redes
+4. Conclusiones
+El requisito RNF-02 garantiza que el sistema Chill Zone sea accesible desde
+cualquier ubicación, facilitando su uso por parte de estudiantes y
+administradores sin depender de una red específica.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-03)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-03
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento describe el requisito RNF-03, que establece que el sistema debe
+responder en menos de 2 segundos por operación básica, incluyendo consultas,
+reservas y generación de reportes.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-03
+Tipo: Rendimiento
+Nombre: Tiempo de respuesta óptimo
+Versión: 1.0
+Prioridad: Media
+Módulos afectados: Reservas, Control de Uso, Reportes
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Tiempo promedio de
+respuesta
+≤ 2 s Pruebas de rendimiento
+Porcentaje de
+cumplimiento
+≥ 95 % Monitoreo de
+operaciones
+Carga máxima
+soportada
+20 usuarios concurrentes Pruebas de estrés
+4. Conclusiones
+El cumplimiento del RNF-03 asegura una experiencia fluida para los usuarios
+del sistema Chill Zone, incluso en momentos de alta demanda.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-04)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-04
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento describe el requisito RNF-04, que establece que los datos de
+usuarios, reservas e incidencias deben almacenarse de forma segura y
+confidencial, cumpliendo con buenas prácticas de protección de datos.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-04
+Tipo: Seguridad
+Nombre: Protección de datos y confidencialidad
+Versión: 1.0
+Prioridad: Alta
+Módulos afectados: Autenticación, Reservas, Incidencias, Administración
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Encriptación de
+contraseñas
+100 % Revisión de base de datos
+Acceso autorizado Solo por roles definidos Pruebas de control de
+acceso
+Integridad de datos ≥ 99 % Auditoría de registros
+4. Conclusiones
+El RNF-04 es esencial para garantizar la seguridad de la información en el
+sistema Chill Zone, protegiendo la privacidad de los usuarios y la integridad de
+los datos.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-05)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-05
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento describe el requisito RNF-05, que establece que el sistema debe
+ser compatible con el navegador Google Chrome, asegurando su correcto
+funcionamiento en entornos comunes de uso estudiantil.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-05
+Tipo: Compatibilidad
+Nombre: Soporte para navegador Chrome
+Versión: 1.0
+Prioridad: Media
+Módulos afectados: Todos los módulos del sistema
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Compatibilidad
+funcional
+100 % en Chrome Pruebas de interfaz y
+navegación
+Visualización correcta Sin errores de estilo o
+carga
+Pruebas de UI
+Acceso completo Todas las funciones
+disponibles
+Pruebas de funcionalidad
+completa
+4. Conclusiones
+El RNF-05 garantiza que el sistema Chill Zone sea accesible desde el navegador
+más utilizado por los estudiantes, evitando problemas de compatibilidad.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-06)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-06
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento describe el requisito RNF-06, que establece que el sistema debe
+soportar al menos 20 usuarios concurrentes sin degradación perceptible en el
+rendimiento.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-06
+Tipo: Escalabilidad
+Nombre: Soporte para usuarios concurrentes
+Versión: 1.0
+Prioridad: Alta
+Módulos afectados: Autenticación, Reservas, Control de Uso
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Usuarios simultáneos ≥ 20 Pruebas de carga
+Tiempo de respuesta ≤ 2 s Monitoreo en tiempo real
+Porcentaje de éxito ≥ 95 % Pruebas de concurrencia
+4. Conclusiones
+El RNF-06 asegura que el sistema Chill Zone pueda ser utilizado por varios
+estudiantes al mismo tiempo sin afectar la experiencia de uso.
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Requisito No Funcional (RNF-07)
+Proyecto: Sistema de Gestión Hospitalaria
+Periodo: Enero – Junio 2025
+Director del Proyecto: Ing. Carlos Parreño
+Código: RNF-07
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Introducción
+Este documento describe el requisito RNF-07, que establece que todas las
+actualizaciones del sistema deben realizarse fuera del horario de funcionamiento
+de la Chill Zone (22h00–06h00), para evitar interrupciones en el servicio.
+2. Descripción del requisito
+Elemento Descripción
+Código: RNF-07
+Tipo: Restricción operativa
+Nombre: Actualizaciones fuera del horario de atención
+Versión: 1.0
+Prioridad: Baja
+Módulos afectados: Todos los módulos del sistema
+3. Objetivo
+Criterio Valor esperado Método de verificación
+Horario de
+mantenimiento
+22h00–06h00 Revisión de logs de
+actualización
+Impacto en usuarios 0 % durante horario
+activo
+Pruebas de disponibilidad
+Registro de cambios 100 % documentado Auditoría de versiones
+4. Conclusiones
+El RNF-07 garantiza que el sistema Chill Zone se mantenga actualizado sin
+afectar la disponibilidad para los usuarios durante el horario de atención.

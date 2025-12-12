@@ -1,0 +1,101 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Administración' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Administración</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item active">Administración</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-5">
+    <div class="card card-primary mb-3">
+      <div class="card-header"><h3 class="card-title">Parámetros del sistema</h3></div>
+      <form method="post" action="{{ url_for('admin.guardar_conf') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="card-body">
+          <div class="row">
+            {% for c in config %}
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>{{ c.nombre.replace('_',' ')|title }}</label>
+                  <input class="form-control" name="{{ c.nombre }}" value="{{ c.valor }}" />
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-footer text-right">
+          <button class="btn btn-primary"><i class="fas fa-save mr-1"></i> Guardar parámetros</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card card-secondary mb-3">
+      <div class="card-header"><h3 class="card-title">Registrar usuario</h3></div>
+      <form method="post" action="{{ url_for('admin.crear_usuario') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group col-md-4"><label>Nombre</label><input class="form-control" name="nombre" value="{{ form_prefill.nombre if form_prefill }}" required /></div>
+            <div class="form-group col-md-4"><label>Correo</label><input class="form-control" name="correo" value="{{ form_prefill.correo if form_prefill }}" required /></div>
+            <div class="form-group col-md-2"><label>Rol</label>
+              <select name="rol" class="form-control">
+                <option value="USUARIO" {% if form_prefill and form_prefill.rol=='USUARIO' %}selected{% endif %}>USUARIO</option>
+                <option value="ADMIN" {% if form_prefill and form_prefill.rol=='ADMIN' %}selected{% endif %}>ADMIN</option>
+              </select>
+            </div>
+            <div class="form-group col-md-2"><label>Contraseña</label><input type="password" class="form-control" name="password" required /></div>
+          </div>
+        </div>
+        <div class="card-footer text-right"><button class="btn btn-success"><i class="fas fa-user-plus mr-1"></i> Registrar</button></div>
+      </form>
+    </div>
+    <div class="card card-info">
+      <div class="card-header"><h3 class="card-title">Usuarios</h3></div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped mb-0">
+            <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th></tr></thead>
+            <tbody>
+            {% for u in usuarios %}
+              <tr>
+                <td>{{ u.nombre }}</td>
+                <td>{{ u.correo }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('admin.cambiar_rol', user_id=u.id) }}" class="form-inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <select name="rol" class="form-control form-control-sm mr-2">
+                      {% for r in ['ESTUDIANTE','ADMIN'] %}
+                        <option value="{{ r }}" {% if u.rol==r %}selected{% endif %}>{{ r }}</option>
+                      {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary">Actualizar</button>
+                  </form>
+                </td>
+                <td>{{ u.estado }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('admin.bloquear', user_id=u.id) }}" class="d-inline" onsubmit="return confirmAction('¿{{ 'Activar' if u.estado=='BLOQUEADO' else 'Inactivar' }} usuario?', 'El estado del usuario cambiará.')">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                      {% if u.estado=='BLOQUEADO' %}
+                        <span class="badge badge-secondary mr-1">INACTIVO</span>
+                        <button class="btn btn-xs btn-outline-success">Activar</button>
+                      {% else %}
+                        <span class="badge badge-success mr-1">ACTIVO</span>
+                        <button class="btn btn-xs btn-outline-danger">Inactivar</button>
+                      {% endif %}
+                    </form>
+                  </td>
+              </tr>
+            {% else %}
+              <tr><td colspan="5" class="text-center text-muted">Sin usuarios</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Gestión de Sanciones' %}
+
+{% block page_header %}
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Gestión de Sanciones</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+          <li class="breadcrumb-item active">Sanciones</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+    <!-- Formulario de Creación -->
+    <div class="col-md-4">
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-gavel mr-1"></i> Nueva Sanción</h3>
+        </div>
+        <div class="card-body">
+          <form method="post" action="{{ url_for('sanciones.crear') }}" id="form-sancion">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="usuario_id" id="selected_usuario_id" required />
+
+            <!-- Buscador de Usuario -->
+            <div class="form-group">
+              <label>Usuario a Sancionar</label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="user-search-input" placeholder="Buscar por nombre o correo..." autocomplete="off">
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fas fa-search"></i></span>
+                </div>
+              </div>
+              <div id="search-results" class="list-group position-absolute w-100" style="z-index: 1000; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+            </div>
+
+            <!-- Lista de "Por Sancionar" (Usuario Seleccionado) -->
+            <div id="selected-user-container" class="mb-3" style="display: none;">
+              <label class="text-muted small">Usuario seleccionado:</label>
+              <div class="callout callout-warning py-2 px-3 position-relative">
+                <button type="button" class="close position-absolute" style="top: 5px; right: 10px;" id="btn-remove-user">&times;</button>
+                <strong id="selected-user-name" class="d-block text-truncate"></strong>
+                <small id="selected-user-email" class="text-muted"></small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Motivo</label>
+              <textarea class="form-control" name="motivo" rows="3" placeholder="Describe el motivo de la sanción..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Tipo de Sanción</label>
+              <select class="form-control" name="tipo">
+                <option value="LEVE">LEVE (3 días de suspensión)</option>
+                <option value="GRAVE">GRAVE (7 días de suspensión)</option>
+                <option value="CRITICA">CRÍTICA (14 días de suspensión)</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-submit" disabled>
+              <i class="fas fa-save mr-1"></i> Aplicar Sanción
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla de Historial -->
+    <div class="col-md-8">
+      <div class="card card-outline card-secondary">
+        <div class="card-header">
+          <h3 class="card-title"><i class="fas fa-history mr-1"></i> Historial de Sanciones</h3>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover projects">
+              <thead>
+                <tr>
+                  <th style="width: 15%">Fecha</th>
+                  <th style="width: 25%">Usuario</th>
+                  <th style="width: 30%">Motivo</th>
+                  <th style="width: 10%">Estado</th>
+                  <th style="width: 20%" class="text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in sanciones %}
+                <tr>
+                  <td>
+                    <small class="text-muted"><i class="far fa-clock mr-1"></i> {{ s.creado_en }}</small>
+                  </td>
+                  <td>
+                    <div class="user-block">
+                      <span class="username ml-0"><a href="#">{{ s.usuario_nombre }} {{ s.usuario_apellido }}</a></span>
+                      <span class="description ml-0">{{ s.usuario_correo }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="d-block">{{ s.motivo }}</span>
+                    <small class="badge badge-{{ 'warning' if s.tipo=='LEVE' else ('danger' if s.tipo=='GRAVE' else 'dark') }} mt-1">{{ s.tipo }}</small>
+                  </td>
+                  <td>
+                    {% if s.estado == 'ACTIVA' %}
+                      <span class="badge badge-success">Activa</span>
+                    {% else %}
+                      <span class="badge badge-secondary">Culminada</span>
+                      {% if s.fecha_fin %}
+                      <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">
+                        Terminada: {{ s.fecha_fin }}
+                      </small>
+                      {% endif %}
+                    {% endif %}
+                  </td>
+                  <td class="text-right">
+                    {% if s.estado == 'ACTIVA' %}
+                    <form method="post" action="{{ url_for('sanciones.levantar', sancion_id=s.id) }}" class="d-inline" onsubmit="return confirmAction(event, this, '¿Levantar Sanción?', '¿Estás seguro de que deseas levantar esta sanción antes de tiempo?')">
+                      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                      <button class="btn btn-danger btn-sm">
+                        <i class="fas fa-unlock mr-1"></i> Levantar Sanción
+                      </button>
+                    </form>
+                    {% else %}
+                      <span class="text-muted small"><i class="fas fa-check"></i> Completada</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">No hay sanciones registradas.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('user-search-input');
+  const resultsContainer = document.getElementById('search-results');
+  const selectedContainer = document.getElementById('selected-user-container');
+  const selectedName = document.getElementById('selected-user-name');
+  const selectedEmail = document.getElementById('selected-user-email');
+  const hiddenInput = document.getElementById('selected_usuario_id');
+  const btnRemove = document.getElementById('btn-remove-user');
+  const btnSubmit = document.getElementById('btn-submit');
+
+  let debounceTimer;
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    const query = this.value.trim();
+    
+    if (query.length < 2) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+
+    debounceTimer = setTimeout(() => {
+      fetch(`{{ url_for('sanciones.buscar') }}?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(users => {
+          resultsContainer.innerHTML = '';
+          if (users.length > 0) {
+            users.forEach(user => {
+              const item = document.createElement('a');
+              item.href = '#';
+              item.className = 'list-group-item list-group-item-action';
+              item.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">${user.nombre} ${user.apellido}</h6>
+                </div>
+                <small class="text-muted">${user.correo}</small>
+              `;
+              item.addEventListener('click', (e) => {
+                e.preventDefault();
+                selectUser(user);
+              });
+              resultsContainer.appendChild(item);
+            });
+            resultsContainer.style.display = 'block';
+          } else {
+            resultsContainer.innerHTML = '<div class="list-group-item text-muted">No se encontraron usuarios</div>';
+            resultsContainer.style.display = 'block';
+          }
+        });
+    }, 300);
+  });
+
+  function selectUser(user) {
+    hiddenInput.value = user.id;
+    selectedName.textContent = `${user.nombre} ${user.apellido}`;
+    selectedEmail.textContent = user.correo;
+    
+    searchInput.value = '';
+    resultsContainer.style.display = 'none';
+    selectedContainer.style.display = 'block';
+    btnSubmit.disabled = false;
+  }
+
+  btnRemove.addEventListener('click', function() {
+    hiddenInput.value = '';
+    selectedContainer.style.display = 'none';
+    btnSubmit.disabled = true;
+  });
+
+  // Close search results when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
+      resultsContainer.style.display = 'none';
+    }
+  });
+});
+</script>
+{% endblock %}

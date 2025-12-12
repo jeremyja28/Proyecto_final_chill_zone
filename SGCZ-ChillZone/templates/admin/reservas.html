@@ -1,0 +1,258 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Gestión de Reservas (Admin)' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Gestión de Reservas</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item"><a href="{{ url_for('admin.index') }}">Admin</a></li><li class="breadcrumb-item active">Reservas</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mb-0">
+        <thead class="thead-light">
+          <tr>
+            <th>Usuario</th>
+            <th>Recurso</th>
+            <th>Fecha</th>
+            <th>Hora Inicio</th>
+            <th>Hora Fin</th>
+            <th>Estado</th>
+            <th>Acompañantes</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for r in reservas %}
+          <tr>
+            <td>
+              <strong>{{ r.usuario_nombre }} {{ r.usuario_apellido or '' }}</strong><br>
+              <small class="text-muted">{{ r.usuario_correo }}</small>
+            </td>
+            <td>{{ r.recurso_nombre }}</td>
+            <td>{{ r.fecha }}</td>
+            <td>{{ r.hora_inicio }}</td>
+            <td>{{ r.hora_fin }}</td>
+            <td>
+              {% if r.estado == 'PENDIENTE' %}
+                <span class="badge bg-warning text-dark">⏳ Pendiente</span>
+                <br><small class="text-muted" id="countdown-{{ r.id }}" data-fecha="{{ r.fecha }}" data-hora="{{ r.hora_inicio }}"></small>
+              {% elif r.estado == 'ACTIVA' %}
+                <span class="badge bg-success">✓ Activa</span>
+              {% elif r.estado == 'FINALIZADA' %}
+                <span class="badge bg-primary">■ Finalizada</span>
+              {% elif r.estado == 'CANCELADA' %}
+                <span class="badge bg-secondary" title="Cancelada por usuario">✗ Cancelada</span>
+              {% elif r.estado == 'CANCELADA_MANTENIMIENTO' %}
+                <span class="badge bg-warning text-dark" title="Cancelada por mantenimiento">⚠ Cancelada (Mantenimiento)</span>
+              {% elif r.estado == 'CANCELADA_SANCION' %}
+                <span class="badge bg-danger" title="Cancelada por sanción o bloqueo">🚫 Cancelada (Sanción)</span>
+              {% else %}
+                <span class="badge bg-light text-dark">{{ r.estado }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if r.acompanantes %}
+                {% for acomp in r.acompanantes %}
+                  <span class="badge badge-info mr-1" style="font-size: 0.85rem;">
+                    <i class="fas fa-user mr-1"></i>{{ acomp.nombre }}
+                  </span>
+                  {% if not loop.last %}<br>{% endif %}
+                {% endfor %}
+              {% else %}
+                <span class="text-muted">Sin acompañantes</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if r.estado in ['PENDIENTE', 'ACTIVA'] %}
+                <form method="post" action="{{ url_for('admin.cancelar_reserva', reserva_id=r.id) }}" class="d-inline" onsubmit="return confirmAction(event, this, '¿Cancelar reserva?', 'Esta acción cancelará la reserva permanentemente.', 'Sí, cancelar')">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                  <button type="submit" class="btn btn-sm btn-danger" title="Cancelar reserva">
+                    <i class="fas fa-ban"></i> Cancelar
+                  </button>
+                </form>
+              {% endif %}
+              {% if r.estado in ['ACTIVA','FINALIZADA'] %}
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-toggle="collapse" data-target="#inc-{{ r.id }}">Reportar incidencia</button>
+              {% endif %}
+              {% if r.estado not in ['PENDIENTE', 'ACTIVA', 'FINALIZADA'] %}
+                <span class="text-muted">-</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% if r.estado in ['ACTIVA','FINALIZADA'] %}
+          <tr class="collapse" id="inc-{{ r.id }}">
+            <td colspan="8">
+              <form method="post" action="{{ url_for('admin.crear_incidencia_admin') }}" class="row g-2" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type="hidden" name="recurso_id" value="{{ r.recurso_id }}" />
+                <input type="hidden" name="reserva_id" value="{{ r.id }}" />
+                <div class="col-5">
+                  <input class="form-control" name="descripcion" placeholder="Describe la incidencia" required />
+                </div>
+                <div class="col-3">
+                  <input type="file" class="form-control-file" name="evidencia_file" accept="image/*,.pdf" title="Adjunta imagen o PDF" />
+                </div>
+                <div class="col-12 mt-2">
+                  <label class="form-label small"><i class="fas fa-user-tag mr-1"></i> Responsables (opcional)</label>
+                  <div id="responsables-container-{{ r.id }}" class="border rounded p-2" style="min-height: 60px; background-color: #f8f9fa;">
+                    <div id="responsables-lista-{{ r.id }}" class="mb-2"></div>
+                    <div id="responsables-opciones-{{ r.id }}" class="d-none"></div>
+                  </div>
+                </div>
+                <div class="col-12 text-right mt-2">
+                  <button class="btn btn-primary">Enviar</button>
+                </div>
+              </form>
+            </td>
+          </tr>
+          {% endif %}
+        {% else %}
+          <tr><td colspan="9" class="text-center py-3 text-muted">No hay reservas registradas</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  function actualizarContadores() {
+    const ahora = new Date();
+    document.querySelectorAll('[id^="countdown-"]').forEach(function(elem) {
+      const fechaStr = elem.getAttribute('data-fecha');
+      const horaStr = elem.getAttribute('data-hora');
+      if (!fechaStr || !horaStr) return;
+
+      const [year, month, day] = fechaStr.split('-').map(Number);
+      const [hh, mm] = horaStr.split(':').map(Number);
+      const reservaDate = new Date(year, month - 1, day, hh, mm, 0);
+
+      const diff = reservaDate - ahora;
+      if (diff <= 0) {
+        elem.textContent = '';
+        return;
+      }
+
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+      let txt = 'Faltan: ';
+      if (dias > 0) txt += dias + 'd ';
+      txt += horas + 'h ' + minutos + 'm';
+      elem.textContent = txt;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    actualizarContadores();
+    setInterval(actualizarContadores, 30000);
+
+    // Sistema de selección de responsables con badges
+    const collapseButtons = document.querySelectorAll('[data-toggle="collapse"]');
+    const responsablesData = {}; // Cache de usuarios por reserva
+    const responsablesSeleccionados = {}; // Sets de IDs seleccionados por reserva
+    
+    collapseButtons.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = btn.getAttribute('data-target');
+        const collapseRow = document.querySelector(targetId);
+        if (!collapseRow) return;
+        
+        // Extraer el ID de la reserva del target (#inc-123 -> 123)
+        const reservaId = targetId.replace('#inc-', '');
+        
+        // Inicializar set de seleccionados si no existe
+        if (!responsablesSeleccionados[reservaId]) {
+          responsablesSeleccionados[reservaId] = new Set();
+        }
+        
+        // Solo cargar si no se ha cargado antes
+        if (!responsablesData[reservaId]) {
+          fetch('/reservas/acompanantes/' + reservaId)
+            .then(res => res.json())
+            .then(data => {
+              if (data.usuarios) {
+                responsablesData[reservaId] = data.usuarios;
+                renderizarOpciones(reservaId);
+              }
+            })
+            .catch(err => console.error('Error cargando acompañantes:', err));
+        } else {
+            renderizarOpciones(reservaId);
+        }
+      });
+    });
+    
+    function renderizarOpciones(reservaId) {
+      const usuarios = responsablesData[reservaId];
+      const opcionesDiv = document.getElementById('responsables-opciones-' + reservaId);
+      
+      if (!opcionesDiv) return;
+
+      opcionesDiv.innerHTML = '';
+      opcionesDiv.classList.remove('d-none');
+      
+      usuarios.forEach(u => {
+        if (!responsablesSeleccionados[reservaId].has(u.id)) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn btn-sm btn-outline-warning m-1';
+          btn.innerHTML = `<i class="fas fa-plus mr-1"></i>${u.nombre}`;
+          btn.onclick = () => agregarResponsable(reservaId, u);
+          opcionesDiv.appendChild(btn);
+        }
+      });
+      
+      // Si todos están seleccionados, mostrar mensaje
+      if (responsablesSeleccionados[reservaId].size === usuarios.length) {
+        opcionesDiv.innerHTML = '<small class="text-muted">Todos agregados</small>';
+      }
+    }
+    
+    function agregarResponsable(reservaId, usuario) {
+      responsablesSeleccionados[reservaId].add(usuario.id);
+      
+      const listaDiv = document.getElementById('responsables-lista-' + reservaId);
+      const form = listaDiv.closest('form');
+      
+      // Crear badge visual
+      const badge = document.createElement('span');
+      badge.className = 'badge badge-warning mr-1 mb-1';
+      badge.style.fontSize = '0.9rem';
+      badge.style.padding = '0.4rem 0.6rem';
+      badge.innerHTML = `
+        <i class="fas fa-exclamation-circle mr-1"></i>${usuario.nombre}
+        <button type="button" class="btn btn-link btn-sm text-white p-0 ml-1" style="text-decoration: none; font-size: 1rem;">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      // Evento para quitar
+      badge.querySelector('button').onclick = () => {
+        responsablesSeleccionados[reservaId].delete(usuario.id);
+        badge.remove();
+        const input = document.getElementById('resp-input-' + reservaId + '-' + usuario.id);
+        if (input) input.remove();
+        renderizarOpciones(reservaId);
+      };
+      
+      listaDiv.appendChild(badge);
+      
+      // Crear input hidden para enviar al servidor
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'responsables';
+      input.value = usuario.id;
+      input.id = 'resp-input-' + reservaId + '-' + usuario.id;
+      form.appendChild(input);
+      
+      renderizarOpciones(reservaId);
+    }
+  });
+})();
+</script>
+{% endblock %}

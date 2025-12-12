@@ -1,0 +1,108 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Configuración del Sistema' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Configuración del Sistema</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item active">Configuración</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 offset-lg-2">
+    <!-- Read-only View -->
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-info-circle mr-2"></i>Resumen de Configuración</h3>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Parámetro</th>
+              <th>Valor Actual</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in config %}
+              {% if 'csrf' not in c.nombre.lower() %}
+              <tr>
+                <td>
+                  {% if 'horario' in c.nombre %}
+                    <i class="fas fa-clock text-primary mr-2"></i>
+                  {% else %}
+                    <i class="fas fa-cog text-secondary mr-2"></i>
+                  {% endif %}
+                  {{ c.nombre.replace('_',' ')|title }}
+                </td>
+                <td><strong>{{ c.valor }}</strong></td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-right">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#configModal">
+          <i class="fas fa-edit mr-1"></i> Configurar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="configModal" tabindex="-1" role="dialog" aria-labelledby="configModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title" id="configModalLabel"><i class="fas fa-cogs mr-2"></i>Editar Configuración</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="post" action="{{ url_for('admin.guardar_conf') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="modal-body">
+          <div class="row">
+            {% for c in config %}
+              {% if 'csrf' not in c.nombre.lower() %}
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>
+                    {% if 'horario' in c.nombre %}
+                      <i class="fas fa-clock text-primary mr-1"></i>
+                    {% else %}
+                      <i class="fas fa-hashtag text-secondary mr-1"></i>
+                    {% endif %}
+                    {{ c.nombre.replace('_',' ')|title }}
+                  </label>
+                  
+                  {% if 'horario' in c.nombre %}
+                    <div class="input-group">
+                      <input type="time" class="form-control" name="{{ c.nombre }}" value="{{ c.valor }}" required id="input_{{ c.nombre }}">
+                      <div class="input-group-append" style="cursor: pointer;" onclick="try{document.getElementById('input_{{ c.nombre }}').showPicker()}catch(e){document.getElementById('input_{{ c.nombre }}').focus()}">
+                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                      </div>
+                    </div>
+                  {% else %}
+                    <input type="number" class="form-control" name="{{ c.nombre }}" value="{{ c.valor }}" required step="1" min="0" />
+                  {% endif %}
+                  
+                  <small class="form-text text-muted">
+                    {% if 'horario' in c.nombre %}Seleccione la hora{% else %}Ingrese un valor numérico{% endif %}
+                  </small>
+                </div>
+              </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

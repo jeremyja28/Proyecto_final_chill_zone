@@ -1,0 +1,122 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Panel de Administración' %}
+
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6">
+    <h1 class="m-0">Dashboard Admin</h1>
+  </div>
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li>
+      <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+  </div>
+  </div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-info">
+      <div class="inner" style="min-height: 120px;">
+        <h3>{{ metrics.get('nuevos_usuarios', 0) }}</h3>
+        <p>Nuevos usuarios</p>
+      </div>
+      <div class="icon"><i class="fas fa-user-plus"></i></div>
+      <a href="{{ url_for('admin.index') }}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-success">
+      <div class="inner" style="min-height: 120px;">
+        <h3 style="font-size: 1.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ metrics.get('recurso_mas_utilizado', 'N/A') }}">{{ metrics.get('recurso_mas_utilizado', 'N/A') }}</h3>
+        <p>Recurso más utilizado</p>
+      </div>
+      <div class="icon"><i class="fas fa-star"></i></div>
+      <a href="{{ url_for('reportes.index') }}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-warning">
+      <div class="inner" style="min-height: 120px;">
+        <h3>{{ metrics.get('reservas_hoy', 0) }}</h3>
+        <p>Reservas hoy</p>
+      </div>
+      <div class="icon"><i class="fas fa-calendar-day"></i></div>
+      <a href="{{ url_for('admin.reservas') }}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-danger">
+      <div class="inner" style="min-height: 120px;">
+        <h3>{{ metrics.get('incidencias_pendientes', 0) }}</h3>
+        <p>Incidencias pendientes</p>
+      </div>
+      <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <a href="{{ url_for('incidencias.index') }}" class="small-box-footer">Más info <i class="fas fa-arrow-circle-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <section class="col-lg-7 connectedSortable">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title"><i class="fas fa-chart-line mr-1"></i>Uso semanal</h3></div>
+      <div class="card-body">
+        <canvas id="chart-uso" height="180" data-chart='{{ (chart_data or {"labels": [], "data": []}) | tojson | safe }}'></canvas>
+      </div>
+    </div>
+  </section>
+  <section class="col-lg-5 connectedSortable">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title"><i class="fas fa-list mr-1"></i>Incidencias recientes</h3></div>
+      <div class="card-body">
+        <ul class="list-unstyled">
+          {% for it in recientes_incidencias or [] %}
+            <li class="mb-2"><i class="fas fa-bug text-danger mr-1"></i> {{ it }}</li>
+          {% else %}
+            <li class="text-muted">Sin novedades</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script>
+  var canvas = document.getElementById('chart-uso');
+  if (canvas) {
+    var payload = canvas.getAttribute('data-chart') || '{"labels":[],"data":[]}';
+    var data = JSON.parse(payload);
+    new Chart(canvas, {
+      type:'line', 
+      data:{
+        labels:data.labels, 
+        datasets:[{
+          label:'Horas', 
+          data:data.data, 
+          borderColor:'#17a2b8', 
+          backgroundColor:'rgba(23,162,184,0.1)',
+          fill:true,
+          tension: 0.4
+        }]
+      }, 
+      options:{
+        maintainAspectRatio:false,
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              min: 0
+            }
+          }]
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

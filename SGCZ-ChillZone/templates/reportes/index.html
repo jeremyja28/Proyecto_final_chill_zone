@@ -1,0 +1,232 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Reportes y Estadísticas' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Reportes y Estadísticas</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item active">Reportes</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+
+<!-- Sección Estadísticas Generales -->
+<div class="row mb-4">
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-info"><div class="inner"><h3>{{ stats.recursos.total }}</h3><p>Total recursos</p></div><div class="icon"><i class="fas fa-cubes"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-success"><div class="inner"><h3>{{ stats.recursos.disponibles }}</h3><p>Disponibles</p></div><div class="icon"><i class="fas fa-check"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-warning"><div class="inner"><h3>{{ stats.recursos.mantenimiento }}</h3><p>Mantenimiento</p></div><div class="icon"><i class="fas fa-tools"></i></div></div>
+  </div>
+  <div class="col-md-3 col-6">
+    <div class="small-box bg-danger"><div class="inner"><h3>{{ stats.recursos.fuera_servicio }}</h3><p>Fuera de servicio</p></div><div class="icon"><i class="fas fa-ban"></i></div></div>
+  </div>
+</div>
+
+
+
+<!-- Sección Reportes de Uso -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h5 class="mb-0">Resumen de uso detallado</h5>
+  <div>
+    <a class="btn btn-outline-primary" href="{{ url_for('reportes.exportar') }}"><i class="fas fa-file-csv mr-1"></i> Exportar CSV</a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('reportes.reservas_hist') }}"><i class="fas fa-history mr-1"></i> Historial de reservas</a>
+  </div>
+</div>
+
+<!-- Gráfico 1: Uso Global por Recurso -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title mb-0">Uso por Recurso (Global)</h3></div>
+      <div class="card-body"><canvas id="chartRecursos" height="100" 
+        data-labels='{{ data.por_recurso|map(attribute='nombre')|list|tojson }}' 
+        data-values='{{ data.por_recurso|map(attribute='usos')|list|tojson }}'></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- Filtro de Usuario -->
+<div class="card mb-4">
+  <div class="card-header bg-light">
+    <h3 class="card-title mb-0"><i class="fas fa-filter mr-2"></i>Filtrar por Usuario</h3>
+  </div>
+  <div class="card-body">
+    <form method="get" id="form-reporte">
+      <input type="hidden" name="usuario_id" id="selected_usuario_id" value="{{ request.args.get('usuario_id', '') }}" />
+      
+      <div class="row">
+        <div class="col-md-10">
+            <!-- Buscador de Usuario -->
+            <div class="form-group mb-0 position-relative">
+              <div class="input-group">
+                <input type="text" class="form-control" id="user-search-input" placeholder="Buscar por nombre o correo..." autocomplete="off">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" id="btn-submit" {% if not usuario_filtro %}disabled{% endif %}><i class="fas fa-search"></i> Buscar</button>
+                </div>
+              </div>
+              <div id="search-results" class="list-group position-absolute w-100" style="z-index: 1000; display: none; max-height: 200px; overflow-y: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>
+            </div>
+            
+            <!-- Lista de "Usuario Seleccionado" -->
+            <div id="selected-user-container" class="mt-2" style="display: {{ 'block' if usuario_filtro else 'none' }};">
+              <div class="callout callout-info py-2 px-3 position-relative">
+                <button type="button" class="close position-absolute" style="top: 5px; right: 10px;" id="btn-remove-user">&times;</button>
+                <strong id="selected-user-name" class="d-block text-truncate">
+                    {% if usuario_filtro %}{{ usuario_filtro.nombre }} {{ usuario_filtro.apellido }}{% endif %}
+                </strong>
+                <small id="selected-user-email" class="text-muted">
+                    {% if usuario_filtro %}{{ usuario_filtro.correo }}{% endif %}
+                </small>
+              </div>
+            </div>
+        </div>
+        
+        <div class="col-md-2">
+          <a href="{{ url_for('reportes.index') }}" class="btn btn-outline-secondary btn-block">Limpiar</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Gráfico 2: Uso Específico del Usuario (si hay filtro) -->
+{% if usuario_filtro %}
+<div class="row">
+  <div class="col-12">
+    <div class="card card-primary card-outline">
+      <div class="card-header"><h3 class="card-title mb-0">Uso de Recursos: {{ usuario_filtro.nombre }} {{ usuario_filtro.apellido }}</h3></div>
+      <div class="card-body">
+        {% if data.usuario_por_recurso %}
+        <canvas id="chartUsuarioRecursos" height="100" 
+          data-labels='{{ data.usuario_por_recurso|map(attribute='nombre')|list|tojson }}' 
+          data-values='{{ data.usuario_por_recurso|map(attribute='usos')|list|tojson }}'></canvas>
+        {% else %}
+        <div class="alert alert-info">No hay datos de uso para el usuario seleccionado.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script>
+// Gráficos de Reportes
+function renderChart(id, type, label){
+  var el=document.getElementById(id); if(!el) return;
+  var labels=JSON.parse(el.getAttribute('data-labels'));
+  var values=JSON.parse(el.getAttribute('data-values'));
+  
+  var bgColors = type === 'pie' ? 
+    ['#007bff', '#28a745', '#ffc107', '#dc3545', '#17a2b8', '#6c757d'] : 
+    'rgba(0,123,255,0.5)';
+    
+  new Chart(el,{
+    type: type,
+    data: {
+      labels: labels,
+      datasets: [{
+        label: label,
+        data: values,
+        backgroundColor: bgColors,
+        borderColor: type === 'pie' ? '#fff' : 'rgba(0,123,255,1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: type === 'bar' ? {y:{beginAtZero:true}} : {}
+    }
+  });
+}
+
+renderChart('chartRecursos', 'bar', 'Usos Globales');
+{% if usuario_filtro and data.usuario_por_recurso %}
+renderChart('chartUsuarioRecursos', 'bar', 'Usos de {{ usuario_filtro.nombre }} {{ usuario_filtro.apellido }}');
+{% endif %}
+
+// User Search Logic
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('user-search-input');
+  if (!searchInput) return;
+
+  const resultsContainer = document.getElementById('search-results');
+  const selectedContainer = document.getElementById('selected-user-container');
+  const selectedName = document.getElementById('selected-user-name');
+  const selectedEmail = document.getElementById('selected-user-email');
+  const hiddenInput = document.getElementById('selected_usuario_id');
+  const btnRemove = document.getElementById('btn-remove-user');
+  const btnSubmit = document.getElementById('btn-submit');
+
+  let debounceTimer;
+
+  searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    const query = this.value.trim();
+    
+    if (query.length < 2) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+
+    debounceTimer = setTimeout(() => {
+      // Reuse the sanctions search endpoint
+      fetch(`{{ url_for('sanciones.buscar') }}?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(users => {
+          resultsContainer.innerHTML = '';
+          if (users.length > 0) {
+            users.forEach(user => {
+              const item = document.createElement('a');
+              item.href = '#';
+              item.className = 'list-group-item list-group-item-action';
+              item.innerHTML = `
+                <div class="d-flex w-100 justify-content-between">
+                  <h6 class="mb-1">${user.nombre} ${user.apellido}</h6>
+                </div>
+                <small class="text-muted">${user.correo}</small>
+              `;
+              item.addEventListener('click', (e) => {
+                e.preventDefault();
+                selectUser(user);
+              });
+              resultsContainer.appendChild(item);
+            });
+            resultsContainer.style.display = 'block';
+          } else {
+            resultsContainer.innerHTML = '<div class="list-group-item text-muted">No se encontraron usuarios</div>';
+            resultsContainer.style.display = 'block';
+          }
+        });
+    }, 300);
+  });
+
+  function selectUser(user) {
+    hiddenInput.value = user.id;
+    selectedName.textContent = `${user.nombre} ${user.apellido}`;
+    selectedEmail.textContent = user.correo;
+    
+    searchInput.value = '';
+    resultsContainer.style.display = 'none';
+    selectedContainer.style.display = 'block';
+    btnSubmit.disabled = false;
+  }
+
+  btnRemove.addEventListener('click', function() {
+    hiddenInput.value = '';
+    selectedContainer.style.display = 'none';
+    btnSubmit.disabled = true;
+  });
+
+  // Close search results when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!searchInput.contains(e.target) && !resultsContainer.contains(e.target)) {
+      resultsContainer.style.display = 'none';
+    }
+  });
+});
+</script>
+{% endblock %}

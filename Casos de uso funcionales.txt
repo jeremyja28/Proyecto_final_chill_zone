@@ -1,0 +1,5324 @@
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-02)
+Código: RF-02
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-02
+Nombre: Registrar usuario
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de Estudiante / Administrador
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 2. Diagrama de Caso de Uso: Registrar usuario (CU-02)
+El administrador accede al módulo de gestión de usuarios, ingresa los datos del nuevo
+usuario y el sistema valida que no exista duplicado antes de guardar la información.
+3. Descripción General
+Este caso de uso describe cómo el administrador del sistema registra nuevos usuarios
+(estudiantes o administradores) en la plataforma Chill Zone. El objetivo es permitir el
+acceso controlado al sistema mediante credenciales únicas.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El sistema debe estar conectado a la base de datos.
+● El correo institucional del nuevo usuario no debe estar registrado previamente.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrado
+r
+2 Selecciona la opción “Registrar nuevo usuario”. Administrado
+r
+3 Ingresa los datos: nombre, correo institucional, rol, contraseña. Administrado
+r
+4 El sistema valida que el correo no esté duplicado. Sistema
+5 Si todo está correcto, guarda el nuevo usuario en la base de
+datos.
+Sistema
+6 El sistema muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el correo ya existe, el sistema muestra: “Usuario ya registrado”.
+FA-02 Si falta algún campo obligatorio, el sistema muestra un mensaje de error.
+FA-03 Si hay error de conexión, se guarda temporalmente y se notifica al
+administrador.
+7. Postcondiciones
+● El nuevo usuario queda registrado en el sistema.
+8. Reglas de Negocio
+● No se permite registrar usuarios con correos duplicados.
+● Solo el administrador puede registrar nuevos usuarios.
+● Las contraseñas deben cumplir con criterios mínimos de seguridad.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de registro ≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+Exactitud de datos ≥ 99 % Revisión de base de datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Datos incompletos o inválidos.
+● Intento de duplicación de usuario.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-02 “Registrar usuario” garantiza que el sistema Chill Zone mantenga
+un control seguro y ordenado de los accesos. Su correcta implementación asegura
+trazabilidad, seguridad y eficiencia en la gestión de usuarios.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-08)
+Código: RF-08
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-08
+Nombre: Cancelar reserva
+Actor principal: Estudiante
+Actores
+secundarios:
+Administrador
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 8. Diagrama de Caso de Uso: Cancelar reserva (CU-08)
+El estudiante o administrador accede a su historial de reservas, selecciona una reserva
+activa y la cancela. El sistema actualiza el estado del recurso y libera el horario.
+3. Descripción General
+Este caso de uso permite a Estudiante/Administrador cancelar una reserva previamente
+realizada, siempre que no haya iniciado el uso del recurso. Esto libera el espacio para que
+otros usuarios puedan reservarlo.
+4. Precondiciones
+● El Estudiante/Administrador debe haber iniciado sesión.
+● Debe existir una reserva activa que aún no haya comenzado.
+● La cancelación debe hacerse con al menos 10 minutos de anticipación.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Mis
+reservas”.
+Estudiante/A
+dministrador
+2 Selecciona la reserva que desea cancelar. Estudiante/A
+dministrador
+3 El sistema muestra los detalles de la reserva. Sistema
+4 El Estudiante/Administradorconfirma la cancelación. Estudiante/A
+dministrador
+5 El sistema elimina o marca como cancelada la reserva. Sistema
+6 Se actualiza la disponibilidad del recurso. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si la reserva ya está en uso o finalizada, no se puede cancelar.
+FA-02 Si hay error de conexión, se guarda la solicitud y se reintenta
+automáticamente.
+FA-03 Si el Estudiante/Administrador intenta cancelar fuera del tiempo permitido,
+se muestra advertencia.
+7. Postcondiciones
+● La reserva queda cancelada en la base de datos.
+● El recurso queda disponible para otros usuarios.
+8. Reglas de Negocio
+● No se pueden cancelar reservas activas o finalizadas.
+● Las cancelaciones deben hacerse con al menos 10 minutos de anticipación.
+● El sistema debe registrar la fecha y hora de cancelación.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en cancelaciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de
+cancelación
+≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o ya iniciada.
+● Intento de cancelación fuera del tiempo permitido.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-08 “Cancelar reserva” permite a los estudiantes gestionar sus reservas
+de forma flexible y responsable. Su correcta implementación mejora la eficiencia del uso
+de los recursos y evita bloqueos innecesarios en el sistema Chill Zone.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-11)
+Código: RF-11
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de Uso: CU-11
+Nombre: Registrar Incidencia
+Actor principal: Estudiante
+Actores secundarios: Administrador
+Requisitos asociados: RF-08 – El sistema debe permitir registrar incidencias o
+daños reportados en los recursos
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 11. Diagrama de Caso de Uso: Registrar Incidencia (CU-11)
+El estudiante o administrador detecta una falla o daño en un recurso, accede al módulo de
+incidencias, llena el formulario y adjunta evidencia. El sistema registra la incidencia y la
+asocia al recurso afectado.
+3. Descripción General
+Este caso de uso permite a los usuarios (estudiantes o administradores) reportar cualquier
+problema, daño o mal uso detectado en los recursos recreativos del área Chill Zone. El
+reporte queda registrado para seguimiento y mantenimiento.
+4. Precondiciones
+● El Estudiante/Administrador debe haber iniciado sesión.
+● El recurso debe estar registrado en el sistema.
+● El Estudiante/Administrador debe tener acceso al módulo de incidencias.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Reportar
+incidencia”.
+Estudiante /
+Administrador
+2 Selecciona el recurso afectado. Estudiante/Adm
+inistrador
+3 Describe la incidencia (tipo de daño, ubicación,
+observaciones).
+Estudiante/Adm
+inistrador
+4 Adjunta evidencia (foto o archivo). Estudiante/Adm
+inistrador
+5 El sistema valida los datos y registra la incidencia. Sistema
+6 Se genera un código de seguimiento y se muestra
+confirmación.
+Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si falta información obligatoria, el sistema solicita completar los campos.
+FA-03 Si hay error de conexión, se guarda temporalmente y se sincroniza luego.
+7. Postcondiciones
+● La incidencia queda registrada en la base de datos.
+● Se asocia al recurso afectado y queda disponible para revisión por el
+administrador.
+● Se activa el estado “pendiente de revisión” para el recurso.
+8. Reglas de Negocio
+● Solo se pueden registrar incidencias sobre recursos existentes.
+● Las evidencias deben estar en formato válido (imagen o PDF).
+● El sistema debe permitir el seguimiento de cada incidencia.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registro de
+incidencias
+≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 3 min. Monitoreo del sistema
+Registro de evidencia ≥ 90 % de
+incidencias con
+archivo adjunto
+Revisión de base de
+datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no registrado.
+● Archivo adjunto inválido o corrupto.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-11 “Registrar incidencia” permite mantener el control y seguimiento
+de problemas en los recursos recreativos, mejorando la calidad del servicio y facilitando
+la gestión de mantenimiento por parte del personal administrativo.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-12)
+Código: RF-12
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-12
+Nombre: Agregar Recurso
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-06 – El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 12. Diagrama de Caso de Uso: Agregar recurso (CU-12)
+El administrador accede al módulo de gestión de recursos, llena el formulario con los
+datos del nuevo recurso (nombre, tipo, estado, disponibilidad), y el sistema valida los
+campos antes de guardar el registro.
+3. Descripción General
+Este caso de uso permite al administrador registrar nuevos recursos recreativos en el
+sistema Chill Zone, como mesas, televisores, futbolines, etc., para que estén disponibles
+para reserva y uso por parte de los estudiantes.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso no debe estar previamente registrado.
+● Todos los campos obligatorios deben estar completos.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El administrador accede al módulo “Gestión de recursos” Administrad
+or
+2 Selecciona la opción “Agregar recurso” Administrad
+or
+3 Ingresa los datos del recurso: nombre, tipo, estado, ubicación,
+disponibilidad
+Administrad
+or
+4 El sistema valida los campos ingresados Sistema
+5 Si todo está correcto, guarda el recurso en la base de datos Sistema
+6 Se muestra mensaje de confirmación Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el nombre del recurso ya existe, el sistema muestra: “Recurso duplicado”.
+FA-02 Si falta información obligatoria, el sistema solicita completar los campos.
+FA-03 Si hay error de conexión, se guarda temporalmente y se sincroniza luego.
+7. Postcondiciones
+● El recurso queda registrado en la base de datos.
+● Se habilita para su consulta y reserva por los estudiantes.
+8. Reglas de Negocio
+● Cada recurso debe tener un identificador único.
+● El estado inicial del recurso puede ser “Disponible”, “En mantenimiento” o
+“Fuera de servicio”.
+● La disponibilidad debe estar configurada antes de habilitar el recurso para
+reservas.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros ≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 min. Monitoreo del sistema
+Validación de campos 100 % de registros
+con datos
+completos
+Revisión de base de
+datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso duplicado.
+● Campos incompletos o inválidos.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-12 “Agregar recurso” permite al administrador mantener actualizado
+el inventario de recursos recreativos disponibles en Chill Zone, asegurando que los
+estudiantes puedan acceder a una variedad de opciones para su tiempo libre.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-14)
+Código: RF-14
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-14
+Nombre: Eliminar recurso
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-06 – El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 14. Diagrama de Caso de Uso: Eliminar recurso (CU-14)
+El administrador accede al módulo de gestión de recursos, selecciona un recurso
+registrado y confirma su eliminación. El sistema valida que no esté en uso y lo marca
+como “eliminado” (eliminación lógica).
+3. Descripción General
+Este caso de uso permite al administrador eliminar recursos recreativos del sistema Chill
+Zone, ya sea porque están fuera de servicio, dañados o ya no forman parte del inventario.
+La eliminación es lógica, no física, para mantener trazabilidad.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso debe existir en el sistema.
+● El recurso no debe estar en uso ni tener reservas activas.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Gestión de recursos”. Administrador
+2 Consulta la lista de recursos registrados. Sistema
+3 Selecciona el recurso que desea eliminar. Administrador
+4 El sistema muestra los detalles del recurso y solicita
+confirmación.
+Sistema
+5 El administrador confirma la eliminación. Administrador
+6 El sistema valida que no haya reservas activas asociadas. Sistema
+7 Si todo está correcto, marca el recurso como “eliminado”
+en la base de datos.
+Sistema
+8 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el recurso tiene reservas activas, el sistema impide la eliminación.
+FA-02 Si el recurso está en uso, se muestra advertencia y no se permite eliminar.
+7. Postcondiciones
+● El recurso queda marcado como “eliminado” en la base de datos.
+● Ya no aparece en las búsquedas ni está disponible para reservas.
+● Se conserva el historial para auditoría.
+8. Reglas de Negocio
+● Solo el administrador puede eliminar recursos.
+● La eliminación es lógica (no se borra físicamente de la base de datos).
+● No se puede eliminar un recurso con reservas activas o en uso.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en eliminaciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de
+eliminación
+≤ 2 min. Monitoreo del sistema
+Registro de auditoría 100 % de
+eliminaciones
+registradas
+Revisión de logs
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso en uso o con reservas activas.
+● Intento de eliminación sin confirmación.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-14 “Eliminar recurso” permite al administrador mantener actualizado
+el inventario de recursos recreativos, garantizando que solo los elementos disponibles y
+funcionales estén visibles para los estudiantes.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-16)
+Código: RF-16
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-16
+Nombre: Generar estadísticas por usuario
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso (por
+recurso, usuario, fecha y horario)
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 16. Diagrama de Caso de Uso: Generar estadísticas por usuario (CU-16)
+El administrador accede al módulo de estadísticas, selecciona un usuario o grupo de
+usuarios, y el sistema genera gráficos y datos sobre frecuencia de uso, recursos más
+utilizados y horarios preferidos.
+3. Descripción General
+Este caso de uso permite al administrador generar estadísticas detalladas sobre el
+comportamiento de los usuarios en el uso de los recursos recreativos. Esto ayuda a
+identificar patrones de uso, usuarios frecuentes y posibles mejoras en la gestión del
+espacio.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir historial de uso registrado por los usuarios.
+● El sistema debe tener acceso a los datos de uso y reservas.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Estadísticas”. Administrador
+2 Selecciona un usuario o grupo de usuarios. Administrador
+3 Define filtros opcionales (rango de fechas, tipo de recurso, etc.). Administrador
+4 El sistema consulta el historial de uso del usuario. Sistema
+5 El sistema genera estadísticas: número de reservas, recursos
+más usados, tiempo promedio de uso, horarios frecuentes.
+Sistema
+6 Se muestran los resultados. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no tiene historial de uso, el sistema muestra: “Sin datos
+disponibles”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si los filtros son inválidos, el sistema solicita corrección.
+7. Postcondiciones
+● Las estadísticas se generan correctamente y están disponibles para análisis.
+8. Reglas de Negocio
+● Solo el administrador puede acceder a estadísticas de usuarios.
+● Los datos deben mantenerse actualizados y reflejar el historial real.
+● El sistema debe proteger la privacidad de los usuarios al mostrar datos
+agregados cuando sea necesario.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+estadísticas
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión cruzada con
+historial de uso
+11. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no encontrado.
+● Filtros inválidos o sin resultados.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-16 “Generar estadísticas por usuario” permite al administrador analizar
+el comportamiento de los estudiantes en el uso de los recursos recreativos, lo que facilita
+la toma de decisiones para mejorar la gestión del espacio y promover un uso más
+equitativo.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-18)
+Código: RF-18
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-18
+Nombre: Configurar parámetros del sistema
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 18. Diagrama de Caso de Uso: Configurar parámetros del sistema (CU-18)
+El administrador accede al módulo de configuración, consulta los parámetros actuales y
+modifica valores como horarios de funcionamiento, límites de reservas, tiempos de
+mantenimiento, entre otros.
+3. Descripción General
+Este caso de uso permite al administrador ajustar los parámetros generales del sistema
+Chill Zone para que se adapten a las necesidades operativas del espacio recreativo. Esto
+incluye horarios, límites, reglas y configuraciones técnicas.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El sistema debe estar operativo y conectado a la base de datos.
+● Los parámetros actuales deben estar cargados correctamente.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Configuración del
+sistema”.
+Administrador
+2 Consulta los parámetros actuales. Sistema
+3 Selecciona el parámetro que desea modificar (ej. horario de
+apertura).
+Administrador
+4 Ingresa el nuevo valor y guarda los cambios. Administrador
+5 El sistema valida el formato y rango del nuevo valor. Sistema
+6 Si todo está correcto, actualiza la configuración. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el valor ingresado es inválido, el sistema muestra: “Formato incorrecto”.
+FA-02 Si el parámetro no existe, el sistema muestra: “Parámetro no encontrado”.
+7. Postcondiciones
+● El parámetro queda actualizado en la base de datos.
+● Los cambios afectan el comportamiento del sistema según lo configurado.
+8. Reglas de Negocio
+● Solo el administrador puede modificar parámetros del sistema.
+● Los cambios deben validarse antes de aplicarse.
+● Algunos parámetros pueden requerir reinicio del sistema para aplicarse.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-07 Actualizaciones fuera del horario de
+funcionamiento
+Restricción
+operativa
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en configuración ≥ 98 % Pruebas funcionales
+Tiempo promedio de
+modificación
+≤ 2 min. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Parámetro no encontrado.
+● Valor fuera de rango permitido.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_administracion_general
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-18 “Configurar parámetros del sistema” permite al administrador
+adaptar el funcionamiento del sistema Chill Zone a las condiciones reales del entorno,
+asegurando flexibilidad, control y eficiencia operativa.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-01)
+Código: RF-01
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-01
+Nombre: Iniciar sesión
+Actor principal: Estudiante / Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de Estudiante / Administradors
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 1. Diagrama de Caso de Uso: Iniciar sesión (CU-01)
+El actor (Estudiante o Administrador) interactúa con el sistema para ingresar sus
+credenciales. El sistema valida los datos y permite el acceso según el rol.
+3. Descripción General
+Este caso de uso describe cómo un estudiante o administrador accede al sistema mediante
+credenciales registradas. El objetivo es garantizar el acceso seguro y personalizado a las
+funcionalidades del sistema Chill Zone.
+4. Precondiciones
+● El Estudiante / Administrador debe estar registrado previamente.
+● El sistema debe estar operativo y conectado a la base de datos.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El Estudiante / Administrador accede a la pantalla de inicio
+de sesión.
+Estudiante /
+Administrador
+2 Ingresa su correo institucional y contraseña. Estudiante /
+Administrador
+3 El sistema valida las credenciales. Sistema
+4 Si son correctas, redirige al panel correspondiente
+(estudiante o administrador).
+Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si las credenciales son incorrectas, el sistema muestra un mensaje de error.
+FA-02 Si el Estudiante / Administrador está bloqueado, se muestra una
+advertencia y se impide el acceso.
+FA-03 Si hay problemas de conexión, se muestra un mensaje de error y se sugiere
+reintentar.
+7. Postcondiciones
+● El Estudiante / Administrador accede al sistema con permisos según su rol.
+● Se registra la sesión activa en el sistema.
+8. Reglas de Negocio
+● Solo Estudiante / Administrador registrados pueden iniciar sesión.
+● Las credenciales deben ser únicas y seguras.
+● El sistema debe registrar cada inicio de sesión con fecha y hora.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad y confidencialidad de datos Seguridad
+RNF-05 Interfaz intuitiva Usabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de inicio de sesión ≥ 98 % Pruebas funcionales
+Tiempo promedio de validación ≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Estudiante / Administrador no registrado.
+● Contraseña incorrecta.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-01 “Iniciar sesión” es esencial para el acceso controlado al sistema
+Chill Zone. Cumple con los requisitos de seguridad, rendimiento y trazabilidad,
+permitiendo una experiencia segura y eficiente para Estudiante / Administrador.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-03)
+Código: RF-03
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-03
+Nombre: Recuperar contraseña
+Actor principal: Estudiante, Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 3. Diagrama de Caso de Uso: Recuperar contraseña (CU-03)
+El estudiante o administrador solicita la recuperación de su contraseña. El sistema valida
+el correo institucional y envía un enlace temporal para restablecer la contraseña..
+3. Descripción General
+Este caso de uso permite a los estudiantes recuperar el acceso al sistema en caso de olvidar
+su contraseña. El sistema enviará un enlace de recuperación al correo institucional
+registrado.
+4. Precondiciones
+● El estudiante debe estar registrado en el sistema.
+● El correo institucional debe estar activo y accesible.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El Estudiante/Administrador accede a la opción “¿Olvidaste tu
+contraseña?” en la pantalla de inicio de sesión.
+Estudiante/
+Administrad
+or
+2 Ingresa su correo institucional registrado. Estudiante/
+Administrad
+or
+3 El sistema valida que el correo exista en la base de datos. Sistema
+4 El sistema genera un token temporal y lo envía por correo con
+un enlace de recuperación.
+Sistema
+5 El Estudiante/Administrador accede al enlace, ingresa una
+nueva contraseña y la confirma.
+Estudiante/
+Administrad
+or
+6 El sistema actualiza la contraseña y muestra un mensaje de
+éxito.
+Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si el correo no está registrado, el sistema muestra: “Correo no encontrado”.
+FA-02 Si el enlace ha expirado, el sistema solicita generar uno nuevo.
+FA-03 Si hay error de conexión, se muestra un mensaje de reintento.
+7. Postcondiciones
+● La contraseña del usuario se actualiza correctamente.
+8. Reglas de Negocio
+● El enlace de recuperación tiene una validez de 15 minutos.
+● La nueva contraseña debe cumplir con los requisitos de seguridad (mínimo 8
+caracteres, al menos una mayúscula, un número y un símbolo).
+● Solo se permite un intento de recuperación cada 5 minutos.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de
+recuperación
+≥ 95 % Pruebas funcionales
+Tiempo promedio de
+recuperación
+≤ 3 minutos Monitoreo del sistema
+11. Excepciones
+● Error de conexión con el servidor de correo.
+● Token inválido.
+● Intento de recuperación desde un correo no registrado.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-03 “Recuperar contraseña” asegura que los estudiantes puedan
+recuperar el acceso al sistema de forma segura y autónoma, cumpliendo con los
+estándares de seguridad y usabilidad definidos en el proyecto.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-04)
+Código: RF-04
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-04
+Nombre: Asignar roles y permisos
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 4. Diagrama de Caso de Uso: Asignar roles y permisos (CU-04)
+El administrador accede al módulo de gestión de usuarios, consulta los roles disponibles
+y asigna el rol correspondiente a cada usuario registrado. El sistema valida y actualiza los
+permisos.
+3. Descripción General
+Este caso de uso permite al administrador asignar roles (estudiante o administrador) y
+definir los permisos de acceso dentro del sistema Chill Zone. Esto garantiza que cada
+usuario tenga acceso solo a las funcionalidades que le corresponden.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El usuario debe estar previamente registrado.
+● Los roles deben estar definidos en el sistema.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrado
+r
+2 Selecciona un usuario de la lista. Administrado
+r
+3 Consulta los roles disponibles en el sistema. Sistema
+4 Asigna el rol correspondiente (estudiante o administrador). Administrado
+r
+5 El sistema actualiza los permisos del usuario según el rol
+asignado.
+Sistema
+6 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no existe, el sistema muestra: “Usuario no encontrado”.
+FA-02 Si el rol seleccionado no es válido, el sistema muestra un mensaje de error.
+FA-03 Si hay error de conexión, se guarda la acción en caché y se notifica al
+administrador.
+7. Postcondiciones
+● El usuario queda con el rol y permisos actualizados.
+8. Reglas de Negocio
+● Solo el administrador puede asignar o modificar roles.
+● Cada rol tiene permisos definidos y no modificables por el usuario.
+● El sistema debe registrar cada cambio de rol con fecha, hora y responsable.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en asignación de
+roles
+≥ 98 % Pruebas funcionales
+Tiempo promedio de asignación ≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no registrado.
+● Rol inválido o no disponible.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-04 “Asignar roles y permisos” es clave para mantener la seguridad y
+organización del sistema Chill Zone. Permite controlar el acceso a funcionalidades según
+el perfil del usuario, asegurando una experiencia adecuada y protegida.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-05)
+Código: RF-05
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-05
+Nombre: Consultar disponibilidad
+Actor principal: Estudiante, Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-03 – El sistema debe mostrar la disponibilidad en tiempo
+real de los recursos recreativos
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 5. Diagrama de Caso de Uso: Consultar disponibilidad (CU-05)
+El estudiante o administrador accede al módulo de reservas y consulta en tiempo real la
+disponibilidad de los recursos recreativos (mesas, televisores, futbolines, etc.) por fecha
+y franja horaria.
+3. Descripción General
+Este caso de uso permite a los estudiantes visualizar la disponibilidad actual de los
+recursos recreativos del área Chill Zone antes de realizar una reserva. La información se
+presenta de forma clara y actualizada.
+4. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● El sistema debe tener acceso a la base de datos de reservas y estado de los
+recursos.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El Estudiante/Administrador accede al módulo “Reservas”. Estudiante/
+Administrad
+or
+2 Selecciona el recurso que desea consultar (ej. mesa de ping
+pong).
+Estudiante/
+Administrad
+or
+3 Selecciona la fecha y franja horaria. Estudiante/
+Administrad
+or
+4 El sistema consulta la base de datos y muestra la disponibilidad
+en tiempo real.
+Sistema
+5 Si el recurso está disponible, se muestra en verde; si está
+reservado o en mantenimiento, se muestra en rojo o gris.
+Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si hay error de conexión, se muestra un mensaje de reintento.
+FA-03 Si no se selecciona fecha o recurso, el sistema solicita completar los
+campos.
+7. Postcondiciones
+● El Estudiante/Administrador visualiza correctamente la disponibilidad del
+recurso.
+● Se habilita la opción de realizar reserva si el recurso está libre.
+8. Reglas de Negocio
+● La disponibilidad debe actualizarse en tiempo real.
+● Los recursos en mantenimiento no pueden ser reservados.
+● Solo se puede consultar disponibilidad dentro del horario operativo de Chill
+Zone.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en consulta ≥ 98 % Pruebas funcionales
+Tiempo promedio de respuesta ≤ 2 seg. Monitoreo del sistema
+Exactitud de disponibilidad ≥ 99 % Revisión de base de datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no registrado.
+● Fecha fuera del rango permitido.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-05 “Consultar disponibilidad” es esencial para que los estudiantes
+puedan planificar el uso de los recursos recreativos de forma eficiente. Su implementación
+mejora la experiencia del usuario y optimiza la gestión del espacio Chill Zone.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-06)
+Código: RF-06
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-06
+Nombre: Realizar reserva
+Actor principal: Estudiante o Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 6. Diagrama de Caso de Uso: Realizar reserva (CU-06)
+El estudiante o administradorconsulta la disponibilidad de un recurso, selecciona fecha y
+hora, y realiza la reserva. El sistema valida la disponibilidad y envía una confirmación.
+3. Descripción General
+Este caso de uso permite a los estudiantes reservar recursos recreativos disponibles en el
+área Chill Zone (mesas, televisores, futbolines, etc.) por franjas horarias. La reserva queda
+registrada en el sistema y se notifica al usuario.
+4. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● El recurso debe estar disponible en la fecha y hora seleccionada.
+● No debe haber otra reserva activa del mismo usuario en ese horario.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo
+“Reservas”.
+Estudiante/A
+dministrador
+2 Consulta la disponibilidad del recurso deseado. Estudiante/A
+dministrador
+3 Selecciona fecha, hora y recurso. Estudiante/A
+dministrador
+4 El sistema valida que el recurso esté disponible. Sistema
+5 El Estudiante/Administrador confirma la reserva. Estudiante/A
+dministrador
+6 El sistema registra la reserva y envía confirmación. Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso ya está reservado, el sistema muestra: “No disponible en ese
+horario”.
+FA-02 Si el Estudiante/Administrador tiene otra reserva activa en el mismo
+horario, se muestra advertencia.
+FA-03 Si hay error de conexión se notifica al Estudiante/Administrador.
+7. Postcondiciones
+● La reserva queda registrada en la base de datos.
+● El Estudiante/Administrador recibe confirmación de la reserva.
+● El recurso queda marcado como reservado para ese horario.
+8. Reglas de Negocio
+● Un Estudiante/Administrador no puede tener más de una reserva activa en el
+mismo horario.
+● Las reservas deben realizarse con al menos 15 minutos de anticipación.
+● El sistema debe bloquear automáticamente los recursos reservados o en
+mantenimiento.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en reservas ≥ 95 % Pruebas funcionales
+Tiempo promedio de reserva ≤ 2 seg. Monitoreo del sistema
+Exactitud de disponibilidad ≥ 99 % Revisión de base de datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no disponible.
+● Conflicto de horarios con otra reserva.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-06 “Realizar reserva” es fundamental para la operatividad del sistema
+Chill Zone. Permite a los estudiantes gestionar su tiempo de recreación de forma
+organizada y eficiente, asegurando una experiencia fluida y controlada.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-07)
+Código: RF-07
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-07
+Nombre: Modificar reserva
+Actor principal: Estudiante o Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 7. Diagrama de Caso de Uso: Modificar reserva (CU-07)
+El estudiante o administrador accede a su historial de reservas, selecciona una reserva
+activa y modifica la fecha, hora o recurso. El sistema valida la disponibilidad y actualiza
+la información.
+3. Descripción General
+Este caso de uso permite a los estudiantes modificar una reserva previamente realizada,
+siempre que esté dentro del tiempo permitido y el recurso esté disponible en el nuevo
+horario.
+4. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una reserva activa que se pueda modificar.
+● El nuevo horario o recurso debe estar disponible.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Mis
+reservas”.
+Estudiante/A
+dministrador
+2 Selecciona la reserva que desea modificar. Estudiante/A
+dministrador
+3 El sistema muestra los detalles actuales de la reserva. Sistema
+4 El Estudiante/Administrador edita la fecha, hora o
+recurso.
+Estudiante/A
+dministrador
+5 El sistema valida la disponibilidad del nuevo horario. Sistema
+6 Si todo está correcto, actualiza la reserva. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si la reserva ya está en uso o finalizada, no se puede modificar.
+FA-02 Si el nuevo horario está ocupado, el sistema muestra: “No disponible”.
+FA-03 Si hay error de conexión se notifica al usuario.
+7. Postcondiciones
+● La reserva queda actualizada en la base de datos.
+8. Reglas de Negocio
+● Solo se pueden modificar reservas con al menos 15 minutos de anticipación.
+● No se puede modificar una reserva si el recurso está en mantenimiento.
+● El sistema debe validar que no haya conflictos con otras reservas.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en
+modificaciones
+≥ 95 % Pruebas funcionales
+Tiempo promedio de
+modificación
+≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o ya finalizada.
+● Conflicto de horarios con otra reserva.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-07 “Modificar reserva” mejora la flexibilidad del sistema Chill Zone,
+permitiendo a los estudiantes ajustar sus reservas según sus necesidades. Esto optimiza el
+uso de los recursos y mejora la experiencia del usuario.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-09)
+Código: RF-09
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-09
+Nombre: Registrar inicio de uso
+Actor principal: Estudiante
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-04 – El sistema debe permitir registrar el inicio y fin del
+uso de cada recurso
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 9. Diagrama de Caso de Uso: Registrar inicio de uso (CU-09)
+El estudiante llega al área Chill Zone, accede al sistema, selecciona su reserva activa y
+registra el inicio del uso del recurso. El sistema valida la reserva y marca el recurso como
+“en uso”.
+3. Descripción General
+Este caso de uso permite a los estudiantes registrar el momento en que comienzan a
+utilizar un recurso reservado en el área Chill Zone. Esto permite llevar un control preciso
+del tiempo de uso y la trazabilidad de los recursos.
+4. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una reserva activa para el recurso en ese momento.
+● El recurso debe estar disponible y no en mantenimiento.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El estudiante accede al módulo “Mis reservas activas”. Estudiante
+2 Selecciona la reserva correspondiente al recurso que va a usar. Estudiante
+3 El sistema valida que la reserva esté activa y dentro del horario
+permitido.
+Sistema
+4 El estudiante confirma el inicio del uso. Estudiante
+5 El sistema registra la hora de inicio y cambia el estado del
+recurso a “En uso”.
+Sistema
+6 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay una reserva activa, el sistema muestra: “No hay reservas activas
+para este recurso”.
+FA-02 Si el recurso está en mantenimiento, el sistema impide el inicio de uso.
+FA-03 Si hay error de conexión se notifica al usuario.
+7. Postcondiciones
+● El inicio de uso queda registrado en la base de datos.
+● El recurso cambia su estado a “En uso”.
+● Se activa el seguimiento del tiempo de uso.
+8. Reglas de Negocio
+● Solo se puede iniciar el uso dentro del horario reservado.
+● El sistema debe registrar la hora exacta de inicio.
+● No se puede iniciar el uso de un recurso sin una reserva activa.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros de inicio ≥ 98 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o fuera del horario.
+● Recurso en mantenimiento o ya en uso.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-09 “Registrar inicio de uso” permite llevar un control preciso del uso
+de los recursos recreativos, asegurando que se respeten los horarios de reserva y se
+mantenga un historial confiable de uso por parte de los estudiantes.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-10)
+Código: RF-10
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-10
+Nombre: Registrar fin de uso
+Actor principal: Estudiante
+Actores secundarios: Ninguno
+Requisitos asociados: RF-04 – El sistema debe permitir registrar el inicio y fin del
+uso de cada recurso
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 10. Diagrama de Caso de Uso: Registrar fin de uso (CU-10)
+El estudiante accede al sistema, selecciona su sesión activa y confirma que ha terminado
+de usar el recurso. El sistema registra la hora de finalización y libera el recurso.
+3. Descripción General
+Este caso de uso permite a los estudiantes registrar el momento en que finalizan el uso de
+un recurso reservado. Esto permite liberar el recurso para otros usuarios y llevar un
+control del tiempo de uso.
+4. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una sesión de uso activa registrada previamente (CU-09).
+● El recurso debe estar marcado como “En uso”.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El estudiante accede al módulo “Mis sesiones activas”. Estudiante
+2 Selecciona la sesión de uso que desea finalizar. Estudiante
+3 El sistema muestra los detalles de la sesión activa. Sistema
+4 El estudiante confirma el fin del uso. Estudiante
+5 El sistema registra la hora de finalización. Sistema
+6 El recurso cambia su estado a “Disponible”. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay una sesión activa, el sistema muestra: “No hay sesiones activas
+para finalizar”.
+FA-02 Si el recurso ya fue liberado automáticamente por tiempo expirado, se
+muestra advertencia.
+FA-03 Si hay error de conexión se notifica al usuario.
+7. Postcondiciones
+● El fin de uso queda registrado en la base de datos.
+● El recurso queda disponible para nuevas reservas.
+● Se calcula la duración total del uso.
+8. Reglas de Negocio
+● Solo se puede finalizar una sesión que esté activa.
+● El sistema debe registrar la hora exacta de finalización.
+● El tiempo de uso se calcula automáticamente y se asocia al usuario.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros de fin
+de uso
+≥ 98 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Sesión no encontrada o ya finalizada.
+● Intento de finalizar una sesión fuera del horario permitido.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-10 “Registrar fin de uso” permite cerrar correctamente las sesiones de
+uso de los recursos recreativos, asegurando un control preciso del tiempo utilizado y
+liberando los recursos para otros estudiantes.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-13)
+Código: RF-13
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-13
+Nombre: Editar Recurso
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-06 - El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos)
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 13. Diagrama de Caso de Uso: Editar recurso (CU-13)
+El administrador accede al módulo de gestión de recursos, consulta la lista de recursos
+existentes, selecciona uno y modifica sus datos. El sistema valida los cambios y actualiza
+la información.
+3. Descripción General
+Este caso de uso permite al administrador modificar la información de un recurso
+recreativo ya registrado en el sistema Chill Zone, como su nombre, tipo, estado, ubicación
+o disponibilidad.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso debe existir en el sistema.
+● El recurso no debe estar en uso al momento de la edición.
+5. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El administrador accede al módulo “Gestión de recursos”. Administrad
+or
+2 Consulta la lista de recursos registrados. Sistema
+3 Selecciona el recurso que desea editar. Administrad
+or
+4 El sistema muestra los datos actuales del recurso. Sistema
+5 El administrador modifica los campos necesarios (nombre, tipo,
+estado, etc.).
+Administrad
+or
+6 El sistema valida los cambios. Sistema
+7 Si todo está correcto, actualiza la información en la base de
+datos.
+Sistema
+8 Se muestra mensaje de confirmación. Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si el recurso está en uso, el sistema impide la edición.
+7. Postcondiciones
+● El recurso queda actualizado en la base de datos.
+● Los cambios se reflejan en los módulos de reservas y disponibilidad.
+8. Reglas de Negocio
+● Solo el administrador puede editar recursos.
+● No se puede modificar un recurso que esté en uso activo.
+● El sistema debe registrar un historial de cambios por cada edición.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en ediciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de edición ≤ 2 min. Monitoreo del sistema
+Registro de cambios 100 % de
+ediciones
+registradas
+Revisión de logs
+11. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no encontrado.
+● Intento de editar recurso en uso.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-13 “Editar recurso” permite mantener actualizada la información de
+los recursos recreativos, lo que garantiza una gestión eficiente y coherente con el estado
+real de los elementos disponibles en el área Chill Zone.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-15)
+Código: RF-15
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-15
+Nombre: Generar reporte de uso
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso (por
+recurso, usuario, fecha y horario)
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 15. Diagrama de Caso de Uso: Generar reporte de uso (CU-15)
+El administrador accede al módulo de reportes, selecciona filtros como fecha, recurso o
+usuario, y el sistema genera un informe detallado del uso registrado.
+3. Descripción General
+Este caso de uso permite al administrador generar reportes sobre el uso de los recursos
+recreativos del área Chill Zone. Los reportes pueden filtrarse por fechas, usuarios o tipo
+de recurso, y sirven para análisis y toma de decisiones.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir información registrada de uso en el sistema.
+● El sistema debe tener acceso a los datos históricos.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Reportes”. Administrador
+2 Selecciona el tipo de reporte: por recurso, por usuario, por
+fecha.
+Administrador
+3 Define los filtros necesarios (rango de fechas, tipo de recurso,
+etc.).
+Administrador
+4 El sistema consulta la base de datos y genera el reporte. Sistema
+6. Flujos Alternativos
+Código Descripción
+FA-01 Si no hay datos disponibles para los filtros seleccionados, el sistema
+muestra: “Sin resultados”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si el rango de fechas es inválido, el sistema solicita corrección.
+7. Postcondiciones
+● El reporte queda generado y disponible para consulta o exportación.
+8. Reglas de Negocio
+● Solo el administrador puede generar reportes.
+● Los reportes deben incluir fecha, hora, recurso y usuario
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+reportes
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión de base de
+datos
+11. Excepciones
+● Error de conexión con la base de datos.
+● Filtros inválidos o sin resultados.
+● Fallo en la exportación del archivo.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-15 “Generar reporte de uso” permite al administrador obtener
+información clave sobre el comportamiento de los usuarios y el uso de los recursos,
+facilitando la toma de decisiones y la mejora continua del área Chill Zone.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-17)
+Código: RF-17
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-17
+Nombre: Generar reporte de mantenimiento
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso y
+mantenimiento
+Prioridad: Media
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 17. Diagrama de Caso de Uso: Generar reporte de mantenimiento (CU-17)
+El administrador accede al módulo de reportes, selecciona el tipo “mantenimiento”,
+define filtros como fechas o recursos.
+3. Descripción General
+Este caso de uso permite al administrador generar reportes sobre los mantenimientos
+realizados o pendientes en los recursos recreativos del área Chill Zone. El reporte incluye
+fechas, tipo de mantenimiento, estado del recurso y observaciones.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir historial de mantenimiento registrado.
+● El sistema debe tener acceso a los datos de recursos y sus estados.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Reportes”. Administrado
+r
+2 Selecciona el tipo de reporte: “Mantenimiento”. Administrado
+r
+3 Define filtros como rango de fechas, tipo de recurso o estado. Administrado
+r
+4 El sistema consulta la base de datos y genera el reporte. Sistema
+5 El reporte se muestra en pantalla con opción de exportar a PDF. Sistema
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay datos disponibles, el sistema muestra: “Sin registros de
+mantenimiento”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si los filtros son inválidos, el sistema solicita corrección.
+7. Postcondiciones
+● El reporte queda generado y disponible para consulta o exportación.
+● Se registra la acción para trazabilidad.
+8. Reglas de Negocio
+● Solo el administrador puede generar reportes de mantenimiento.
+● Los reportes deben incluir fecha, recurso, tipo de mantenimiento y estado.
+● El sistema debe permitir exportar el reporte en formato PDF.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+reportes
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión cruzada con
+historial de
+mantenimiento
+11. Excepciones
+● Error de conexión con la base de datos.
+● Filtros inválidos o sin resultados.
+● Fallo en la exportación del archivo PDF.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-17 “Generar reporte de mantenimiento” permite al administrador tener
+control sobre el estado y seguimiento de los recursos recreativos, facilitando la
+planificación de reparaciones y la mejora continua del área Chill Zone.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-19)
+Código: RF-19
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+1. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-19
+Nombre: Administrar usuarios
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Alta
+Versión: 1.0
+2. Diagrama de caso de Uso
+Figura 19. Diagrama de Caso de Uso: Administrar usuarios (CU-19)
+El administrador accede al módulo de usuarios, consulta la lista completa, puede editar
+datos, cambiar roles, bloquear usuarios según sea necesario.
+3. Descripción General
+Este caso de uso permite al administrador gestionar la información de los usuarios
+registrados en el sistema Chill Zone. Incluye funciones como consultar, editar, bloquear
+y cambiar roles de estudiantes o administradores.
+4. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir al menos un usuario registrado en el sistema.
+● El sistema debe estar conectado a la base de datos.
+5. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrador
+2 Consulta la lista de usuarios registrados. Sistema
+3 Selecciona un usuario para ver sus datos. Administrador
+4 Puede editar información como nombre, correo, rol o estado. Administrador
+5 El sistema valida los cambios y actualiza la base de datos. Sistema
+6 También puede bloquear usuarios si es necesario. Administrador
+6. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no existe, el sistema muestra: “Usuario no encontrado”.
+FA-02 Si hay error de conexión, se guarda la acción y se sincroniza luego.
+7. Postcondiciones
+● Los datos del usuario quedan actualizados.
+● El usuario puede ser bloqueado o eliminado según las reglas del sistema.
+● Se conserva el historial de cambios para auditoría.
+8. Reglas de Negocio
+● Solo el administrador puede modificar usuarios.
+● Cada acción debe quedar registrada con fecha, hora y responsable.
+9. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+10. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en gestión de
+usuarios
+≥ 98 % Pruebas funcionales
+Tiempo promedio de edición o
+eliminación
+≤ 2 min. Monitoreo del sistema
+11. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no encontrado.
+12. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_administracion_general
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+13. Conclusiones
+El caso de uso CU-19 “Administrar usuarios” cierra el ciclo de gestión del sistema Chill
+Zone, permitiendo al administrador mantener el control sobre quién accede, cómo
+interactúan y qué permisos tienen dentro del sistema.
+14. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-02)
+Código: RF-02
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-02
+Nombre: Registrar usuario
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de Estudiante / Administrador
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 2. Diagrama de Caso de Uso: Registrar usuario (CU-02)
+El administrador accede al módulo de gestión de usuarios, ingresa los datos del nuevo
+usuario y el sistema valida que no exista duplicado antes de guardar la información.
+17. Descripción General
+Este caso de uso describe cómo el administrador del sistema registra nuevos usuarios
+(estudiantes o administradores) en la plataforma Chill Zone. El objetivo es permitir el
+acceso controlado al sistema mediante credenciales únicas.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El sistema debe estar conectado a la base de datos.
+● El correo institucional del nuevo usuario no debe estar registrado previamente.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrado
+r
+2 Selecciona la opción “Registrar nuevo usuario”. Administrado
+r
+3 Ingresa los datos: nombre, correo institucional, rol, contraseña. Administrado
+r
+4 El sistema valida que el correo no esté duplicado. Sistema
+5 Si todo está correcto, guarda el nuevo usuario en la base de
+datos.
+Sistema
+6 El sistema muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el correo ya existe, el sistema muestra: “Usuario ya registrado”.
+FA-02 Si falta algún campo obligatorio, el sistema muestra un mensaje de error.
+FA-03 Si hay error de conexión, se guarda temporalmente y se notifica al
+administrador.
+21. Postcondiciones
+● El nuevo usuario queda registrado en el sistema.
+22. Reglas de Negocio
+● No se permite registrar usuarios con correos duplicados.
+● Solo el administrador puede registrar nuevos usuarios.
+● Las contraseñas deben cumplir con criterios mínimos de seguridad.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de registro ≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+Exactitud de datos ≥ 99 % Revisión de base de datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Datos incompletos o inválidos.
+● Intento de duplicación de usuario.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-02 “Registrar usuario” garantiza que el sistema Chill Zone mantenga
+un control seguro y ordenado de los accesos. Su correcta implementación asegura
+trazabilidad, seguridad y eficiencia en la gestión de usuarios.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-08)
+Código: RF-08
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-08
+Nombre: Cancelar reserva
+Actor principal: Estudiante
+Actores
+secundarios:
+Administrador
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 8. Diagrama de Caso de Uso: Cancelar reserva (CU-08)
+El estudiante o administrador accede a su historial de reservas, selecciona una reserva
+activa y la cancela. El sistema actualiza el estado del recurso y libera el horario.
+17. Descripción General
+Este caso de uso permite a Estudiante/Administrador cancelar una reserva previamente
+realizada, siempre que no haya iniciado el uso del recurso. Esto libera el espacio para que
+otros usuarios puedan reservarlo.
+18. Precondiciones
+● El Estudiante/Administrador debe haber iniciado sesión.
+● Debe existir una reserva activa que aún no haya comenzado.
+● La cancelación debe hacerse con al menos 10 minutos de anticipación.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Mis
+reservas”.
+Estudiante/A
+dministrador
+2 Selecciona la reserva que desea cancelar. Estudiante/A
+dministrador
+3 El sistema muestra los detalles de la reserva. Sistema
+4 El Estudiante/Administradorconfirma la cancelación. Estudiante/A
+dministrador
+5 El sistema elimina o marca como cancelada la reserva. Sistema
+6 Se actualiza la disponibilidad del recurso. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si la reserva ya está en uso o finalizada, no se puede cancelar.
+FA-02 Si hay error de conexión, se guarda la solicitud y se reintenta
+automáticamente.
+FA-03 Si el Estudiante/Administrador intenta cancelar fuera del tiempo permitido,
+se muestra advertencia.
+21. Postcondiciones
+● La reserva queda cancelada en la base de datos.
+● El recurso queda disponible para otros usuarios.
+22. Reglas de Negocio
+● No se pueden cancelar reservas activas o finalizadas.
+● Las cancelaciones deben hacerse con al menos 10 minutos de anticipación.
+● El sistema debe registrar la fecha y hora de cancelación.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en cancelaciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de
+cancelación
+≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o ya iniciada.
+● Intento de cancelación fuera del tiempo permitido.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-08 “Cancelar reserva” permite a los estudiantes gestionar sus reservas
+de forma flexible y responsable. Su correcta implementación mejora la eficiencia del uso
+de los recursos y evita bloqueos innecesarios en el sistema Chill Zone.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-11)
+Código: RF-11
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de Uso: CU-11
+Nombre: Registrar Incidencia
+Actor principal: Estudiante
+Actores secundarios: Administrador
+Requisitos asociados: RF-08 – El sistema debe permitir registrar incidencias o
+daños reportados en los recursos
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 11. Diagrama de Caso de Uso: Registrar Incidencia (CU-11)
+El estudiante o administrador detecta una falla o daño en un recurso, accede al módulo de
+incidencias, llena el formulario y adjunta evidencia. El sistema registra la incidencia y la
+asocia al recurso afectado.
+17. Descripción General
+Este caso de uso permite a los usuarios (estudiantes o administradores) reportar cualquier
+problema, daño o mal uso detectado en los recursos recreativos del área Chill Zone. El
+reporte queda registrado para seguimiento y mantenimiento.
+18. Precondiciones
+● El Estudiante/Administrador debe haber iniciado sesión.
+● El recurso debe estar registrado en el sistema.
+● El Estudiante/Administrador debe tener acceso al módulo de incidencias.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Reportar
+incidencia”.
+Estudiante /
+Administrador
+2 Selecciona el recurso afectado. Estudiante/Adm
+inistrador
+3 Describe la incidencia (tipo de daño, ubicación,
+observaciones).
+Estudiante/Adm
+inistrador
+4 Adjunta evidencia (foto o archivo). Estudiante/Adm
+inistrador
+5 El sistema valida los datos y registra la incidencia. Sistema
+6 Se genera un código de seguimiento y se muestra
+confirmación.
+Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si falta información obligatoria, el sistema solicita completar los campos.
+FA-03 Si hay error de conexión, se guarda temporalmente y se sincroniza luego.
+21. Postcondiciones
+● La incidencia queda registrada en la base de datos.
+● Se asocia al recurso afectado y queda disponible para revisión por el
+administrador.
+● Se activa el estado “pendiente de revisión” para el recurso.
+22. Reglas de Negocio
+● Solo se pueden registrar incidencias sobre recursos existentes.
+● Las evidencias deben estar en formato válido (imagen o PDF).
+● El sistema debe permitir el seguimiento de cada incidencia.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registro de
+incidencias
+≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 3 min. Monitoreo del sistema
+Registro de evidencia ≥ 90 % de
+incidencias con
+archivo adjunto
+Revisión de base de
+datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no registrado.
+● Archivo adjunto inválido o corrupto.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-11 “Registrar incidencia” permite mantener el control y seguimiento
+de problemas en los recursos recreativos, mejorando la calidad del servicio y facilitando
+la gestión de mantenimiento por parte del personal administrativo.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-12)
+Código: RF-12
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-12
+Nombre: Agregar Recurso
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-06 – El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 12. Diagrama de Caso de Uso: Agregar recurso (CU-12)
+El administrador accede al módulo de gestión de recursos, llena el formulario con los
+datos del nuevo recurso (nombre, tipo, estado, disponibilidad), y el sistema valida los
+campos antes de guardar el registro.
+17. Descripción General
+Este caso de uso permite al administrador registrar nuevos recursos recreativos en el
+sistema Chill Zone, como mesas, televisores, futbolines, etc., para que estén disponibles
+para reserva y uso por parte de los estudiantes.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso no debe estar previamente registrado.
+● Todos los campos obligatorios deben estar completos.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El administrador accede al módulo “Gestión de recursos” Administrad
+or
+2 Selecciona la opción “Agregar recurso” Administrad
+or
+3 Ingresa los datos del recurso: nombre, tipo, estado, ubicación,
+disponibilidad
+Administrad
+or
+4 El sistema valida los campos ingresados Sistema
+5 Si todo está correcto, guarda el recurso en la base de datos Sistema
+6 Se muestra mensaje de confirmación Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el nombre del recurso ya existe, el sistema muestra: “Recurso duplicado”.
+FA-02 Si falta información obligatoria, el sistema solicita completar los campos.
+FA-03 Si hay error de conexión, se guarda temporalmente y se sincroniza luego.
+21. Postcondiciones
+● El recurso queda registrado en la base de datos.
+● Se habilita para su consulta y reserva por los estudiantes.
+22. Reglas de Negocio
+● Cada recurso debe tener un identificador único.
+● El estado inicial del recurso puede ser “Disponible”, “En mantenimiento” o
+“Fuera de servicio”.
+● La disponibilidad debe estar configurada antes de habilitar el recurso para
+reservas.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros ≥ 95 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 min. Monitoreo del sistema
+Validación de campos 100 % de registros
+con datos
+completos
+Revisión de base de
+datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso duplicado.
+● Campos incompletos o inválidos.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-12 “Agregar recurso” permite al administrador mantener actualizado
+el inventario de recursos recreativos disponibles en Chill Zone, asegurando que los
+estudiantes puedan acceder a una variedad de opciones para su tiempo libre.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-14)
+Código: RF-14
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-14
+Nombre: Eliminar recurso
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-06 – El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 14. Diagrama de Caso de Uso: Eliminar recurso (CU-14)
+El administrador accede al módulo de gestión de recursos, selecciona un recurso
+registrado y confirma su eliminación. El sistema valida que no esté en uso y lo marca
+como “eliminado” (eliminación lógica).
+17. Descripción General
+Este caso de uso permite al administrador eliminar recursos recreativos del sistema Chill
+Zone, ya sea porque están fuera de servicio, dañados o ya no forman parte del inventario.
+La eliminación es lógica, no física, para mantener trazabilidad.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso debe existir en el sistema.
+● El recurso no debe estar en uso ni tener reservas activas.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Gestión de recursos”. Administrador
+2 Consulta la lista de recursos registrados. Sistema
+3 Selecciona el recurso que desea eliminar. Administrador
+4 El sistema muestra los detalles del recurso y solicita
+confirmación.
+Sistema
+5 El administrador confirma la eliminación. Administrador
+6 El sistema valida que no haya reservas activas asociadas. Sistema
+7 Si todo está correcto, marca el recurso como “eliminado”
+en la base de datos.
+Sistema
+8 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el recurso tiene reservas activas, el sistema impide la eliminación.
+FA-02 Si el recurso está en uso, se muestra advertencia y no se permite eliminar.
+21. Postcondiciones
+● El recurso queda marcado como “eliminado” en la base de datos.
+● Ya no aparece en las búsquedas ni está disponible para reservas.
+● Se conserva el historial para auditoría.
+22. Reglas de Negocio
+● Solo el administrador puede eliminar recursos.
+● La eliminación es lógica (no se borra físicamente de la base de datos).
+● No se puede eliminar un recurso con reservas activas o en uso.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en eliminaciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de
+eliminación
+≤ 2 min. Monitoreo del sistema
+Registro de auditoría 100 % de
+eliminaciones
+registradas
+Revisión de logs
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso en uso o con reservas activas.
+● Intento de eliminación sin confirmación.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-14 “Eliminar recurso” permite al administrador mantener actualizado
+el inventario de recursos recreativos, garantizando que solo los elementos disponibles y
+funcionales estén visibles para los estudiantes.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-16)
+Código: RF-16
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-16
+Nombre: Generar estadísticas por usuario
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso (por
+recurso, usuario, fecha y horario)
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 16. Diagrama de Caso de Uso: Generar estadísticas por usuario (CU-16)
+El administrador accede al módulo de estadísticas, selecciona un usuario o grupo de
+usuarios, y el sistema genera gráficos y datos sobre frecuencia de uso, recursos más
+utilizados y horarios preferidos.
+17. Descripción General
+Este caso de uso permite al administrador generar estadísticas detalladas sobre el
+comportamiento de los usuarios en el uso de los recursos recreativos. Esto ayuda a
+identificar patrones de uso, usuarios frecuentes y posibles mejoras en la gestión del
+espacio.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir historial de uso registrado por los usuarios.
+● El sistema debe tener acceso a los datos de uso y reservas.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Estadísticas”. Administrador
+2 Selecciona un usuario o grupo de usuarios. Administrador
+3 Define filtros opcionales (rango de fechas, tipo de recurso, etc.). Administrador
+4 El sistema consulta el historial de uso del usuario. Sistema
+5 El sistema genera estadísticas: número de reservas, recursos
+más usados, tiempo promedio de uso, horarios frecuentes.
+Sistema
+6 Se muestran los resultados. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no tiene historial de uso, el sistema muestra: “Sin datos
+disponibles”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si los filtros son inválidos, el sistema solicita corrección.
+21. Postcondiciones
+● Las estadísticas se generan correctamente y están disponibles para análisis.
+22. Reglas de Negocio
+● Solo el administrador puede acceder a estadísticas de usuarios.
+● Los datos deben mantenerse actualizados y reflejar el historial real.
+● El sistema debe proteger la privacidad de los usuarios al mostrar datos
+agregados cuando sea necesario.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+estadísticas
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión cruzada con
+historial de uso
+25. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no encontrado.
+● Filtros inválidos o sin resultados.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-16 “Generar estadísticas por usuario” permite al administrador analizar
+el comportamiento de los estudiantes en el uso de los recursos recreativos, lo que facilita
+la toma de decisiones para mejorar la gestión del espacio y promover un uso más
+equitativo.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-18)
+Código: RF-18
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-18
+Nombre: Configurar parámetros del sistema
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 18. Diagrama de Caso de Uso: Configurar parámetros del sistema (CU-18)
+El administrador accede al módulo de configuración, consulta los parámetros actuales y
+modifica valores como horarios de funcionamiento, límites de reservas, tiempos de
+mantenimiento, entre otros.
+17. Descripción General
+Este caso de uso permite al administrador ajustar los parámetros generales del sistema
+Chill Zone para que se adapten a las necesidades operativas del espacio recreativo. Esto
+incluye horarios, límites, reglas y configuraciones técnicas.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El sistema debe estar operativo y conectado a la base de datos.
+● Los parámetros actuales deben estar cargados correctamente.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Configuración del
+sistema”.
+Administrador
+2 Consulta los parámetros actuales. Sistema
+3 Selecciona el parámetro que desea modificar (ej. horario de
+apertura).
+Administrador
+4 Ingresa el nuevo valor y guarda los cambios. Administrador
+5 El sistema valida el formato y rango del nuevo valor. Sistema
+6 Si todo está correcto, actualiza la configuración. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el valor ingresado es inválido, el sistema muestra: “Formato incorrecto”.
+FA-02 Si el parámetro no existe, el sistema muestra: “Parámetro no encontrado”.
+21. Postcondiciones
+● El parámetro queda actualizado en la base de datos.
+● Los cambios afectan el comportamiento del sistema según lo configurado.
+22. Reglas de Negocio
+● Solo el administrador puede modificar parámetros del sistema.
+● Los cambios deben validarse antes de aplicarse.
+● Algunos parámetros pueden requerir reinicio del sistema para aplicarse.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-07 Actualizaciones fuera del horario de
+funcionamiento
+Restricción
+operativa
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en configuración ≥ 98 % Pruebas funcionales
+Tiempo promedio de
+modificación
+≤ 2 min. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Parámetro no encontrado.
+● Valor fuera de rango permitido.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_administracion_general
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-18 “Configurar parámetros del sistema” permite al administrador
+adaptar el funcionamiento del sistema Chill Zone a las condiciones reales del entorno,
+asegurando flexibilidad, control y eficiencia operativa.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-01)
+Código: RF-01
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-01
+Nombre: Iniciar sesión
+Actor principal: Estudiante / Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de Estudiante / Administradors
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 1. Diagrama de Caso de Uso: Iniciar sesión (CU-01)
+El actor (Estudiante o Administrador) interactúa con el sistema para ingresar sus
+credenciales. El sistema valida los datos y permite el acceso según el rol.
+17. Descripción General
+Este caso de uso describe cómo un estudiante o administrador accede al sistema mediante
+credenciales registradas. El objetivo es garantizar el acceso seguro y personalizado a las
+funcionalidades del sistema Chill Zone.
+18. Precondiciones
+● El Estudiante / Administrador debe estar registrado previamente.
+● El sistema debe estar operativo y conectado a la base de datos.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El Estudiante / Administrador accede a la pantalla de inicio
+de sesión.
+Estudiante /
+Administrador
+2 Ingresa su correo institucional y contraseña. Estudiante /
+Administrador
+3 El sistema valida las credenciales. Sistema
+4 Si son correctas, redirige al panel correspondiente
+(estudiante o administrador).
+Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si las credenciales son incorrectas, el sistema muestra un mensaje de error.
+FA-02 Si el Estudiante / Administrador está bloqueado, se muestra una
+advertencia y se impide el acceso.
+FA-03 Si hay problemas de conexión, se muestra un mensaje de error y se sugiere
+reintentar.
+21. Postcondiciones
+● El Estudiante / Administrador accede al sistema con permisos según su rol.
+● Se registra la sesión activa en el sistema.
+22. Reglas de Negocio
+● Solo Estudiante / Administrador registrados pueden iniciar sesión.
+● Las credenciales deben ser únicas y seguras.
+● El sistema debe registrar cada inicio de sesión con fecha y hora.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad y confidencialidad de datos Seguridad
+RNF-05 Interfaz intuitiva Usabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de inicio de sesión ≥ 98 % Pruebas funcionales
+Tiempo promedio de validación ≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Estudiante / Administrador no registrado.
+● Contraseña incorrecta.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-01 “Iniciar sesión” es esencial para el acceso controlado al sistema
+Chill Zone. Cumple con los requisitos de seguridad, rendimiento y trazabilidad,
+permitiendo una experiencia segura y eficiente para Estudiante / Administrador.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-03)
+Código: RF-03
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-03
+Nombre: Recuperar contraseña
+Actor principal: Estudiante, Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 3. Diagrama de Caso de Uso: Recuperar contraseña (CU-03)
+El estudiante o administrador solicita la recuperación de su contraseña. El sistema valida
+el correo institucional y envía un enlace temporal para restablecer la contraseña..
+17. Descripción General
+Este caso de uso permite a los estudiantes recuperar el acceso al sistema en caso de olvidar
+su contraseña. El sistema enviará un enlace de recuperación al correo institucional
+registrado.
+18. Precondiciones
+● El estudiante debe estar registrado en el sistema.
+● El correo institucional debe estar activo y accesible.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El Estudiante/Administrador accede a la opción “¿Olvidaste tu
+contraseña?” en la pantalla de inicio de sesión.
+Estudiante/
+Administrad
+or
+2 Ingresa su correo institucional registrado. Estudiante/
+Administrad
+or
+3 El sistema valida que el correo exista en la base de datos. Sistema
+4 El sistema genera un token temporal y lo envía por correo con
+un enlace de recuperación.
+Sistema
+5 El Estudiante/Administrador accede al enlace, ingresa una
+nueva contraseña y la confirma.
+Estudiante/
+Administrad
+or
+6 El sistema actualiza la contraseña y muestra un mensaje de
+éxito.
+Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si el correo no está registrado, el sistema muestra: “Correo no encontrado”.
+FA-02 Si el enlace ha expirado, el sistema solicita generar uno nuevo.
+FA-03 Si hay error de conexión, se muestra un mensaje de reintento.
+21. Postcondiciones
+● La contraseña del usuario se actualiza correctamente.
+22. Reglas de Negocio
+● El enlace de recuperación tiene una validez de 15 minutos.
+● La nueva contraseña debe cumplir con los requisitos de seguridad (mínimo 8
+caracteres, al menos una mayúscula, un número y un símbolo).
+● Solo se permite un intento de recuperación cada 5 minutos.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito de
+recuperación
+≥ 95 % Pruebas funcionales
+Tiempo promedio de
+recuperación
+≤ 3 minutos Monitoreo del sistema
+25. Excepciones
+● Error de conexión con el servidor de correo.
+● Token inválido.
+● Intento de recuperación desde un correo no registrado.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-03 “Recuperar contraseña” asegura que los estudiantes puedan
+recuperar el acceso al sistema de forma segura y autónoma, cumpliendo con los
+estándares de seguridad y usabilidad definidos en el proyecto.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-04)
+Código: RF-04
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-04
+Nombre: Asignar roles y permisos
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 4. Diagrama de Caso de Uso: Asignar roles y permisos (CU-04)
+El administrador accede al módulo de gestión de usuarios, consulta los roles disponibles
+y asigna el rol correspondiente a cada usuario registrado. El sistema valida y actualiza los
+permisos.
+17. Descripción General
+Este caso de uso permite al administrador asignar roles (estudiante o administrador) y
+definir los permisos de acceso dentro del sistema Chill Zone. Esto garantiza que cada
+usuario tenga acceso solo a las funcionalidades que le corresponden.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El usuario debe estar previamente registrado.
+● Los roles deben estar definidos en el sistema.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrado
+r
+2 Selecciona un usuario de la lista. Administrado
+r
+3 Consulta los roles disponibles en el sistema. Sistema
+4 Asigna el rol correspondiente (estudiante o administrador). Administrado
+r
+5 El sistema actualiza los permisos del usuario según el rol
+asignado.
+Sistema
+6 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no existe, el sistema muestra: “Usuario no encontrado”.
+FA-02 Si el rol seleccionado no es válido, el sistema muestra un mensaje de error.
+FA-03 Si hay error de conexión, se guarda la acción en caché y se notifica al
+administrador.
+21. Postcondiciones
+● El usuario queda con el rol y permisos actualizados.
+22. Reglas de Negocio
+● Solo el administrador puede asignar o modificar roles.
+● Cada rol tiene permisos definidos y no modificables por el usuario.
+● El sistema debe registrar cada cambio de rol con fecha, hora y responsable.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en asignación de
+roles
+≥ 98 % Pruebas funcionales
+Tiempo promedio de asignación ≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no registrado.
+● Rol inválido o no disponible.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_autenticacion_control_usuarios
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-04 “Asignar roles y permisos” es clave para mantener la seguridad y
+organización del sistema Chill Zone. Permite controlar el acceso a funcionalidades según
+el perfil del usuario, asegurando una experiencia adecuada y protegida.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-05)
+Código: RF-05
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-05
+Nombre: Consultar disponibilidad
+Actor principal: Estudiante, Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-03 – El sistema debe mostrar la disponibilidad en tiempo
+real de los recursos recreativos
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 5. Diagrama de Caso de Uso: Consultar disponibilidad (CU-05)
+El estudiante o administrador accede al módulo de reservas y consulta en tiempo real la
+disponibilidad de los recursos recreativos (mesas, televisores, futbolines, etc.) por fecha
+y franja horaria.
+17. Descripción General
+Este caso de uso permite a los estudiantes visualizar la disponibilidad actual de los
+recursos recreativos del área Chill Zone antes de realizar una reserva. La información se
+presenta de forma clara y actualizada.
+18. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● El sistema debe tener acceso a la base de datos de reservas y estado de los
+recursos.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El Estudiante/Administrador accede al módulo “Reservas”. Estudiante/
+Administrad
+or
+2 Selecciona el recurso que desea consultar (ej. mesa de ping
+pong).
+Estudiante/
+Administrad
+or
+3 Selecciona la fecha y franja horaria. Estudiante/
+Administrad
+or
+4 El sistema consulta la base de datos y muestra la disponibilidad
+en tiempo real.
+Sistema
+5 Si el recurso está disponible, se muestra en verde; si está
+reservado o en mantenimiento, se muestra en rojo o gris.
+Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si hay error de conexión, se muestra un mensaje de reintento.
+FA-03 Si no se selecciona fecha o recurso, el sistema solicita completar los
+campos.
+21. Postcondiciones
+● El Estudiante/Administrador visualiza correctamente la disponibilidad del
+recurso.
+● Se habilita la opción de realizar reserva si el recurso está libre.
+22. Reglas de Negocio
+● La disponibilidad debe actualizarse en tiempo real.
+● Los recursos en mantenimiento no pueden ser reservados.
+● Solo se puede consultar disponibilidad dentro del horario operativo de Chill
+Zone.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en consulta ≥ 98 % Pruebas funcionales
+Tiempo promedio de respuesta ≤ 2 seg. Monitoreo del sistema
+Exactitud de disponibilidad ≥ 99 % Revisión de base de datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no registrado.
+● Fecha fuera del rango permitido.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-05 “Consultar disponibilidad” es esencial para que los estudiantes
+puedan planificar el uso de los recursos recreativos de forma eficiente. Su implementación
+mejora la experiencia del usuario y optimiza la gestión del espacio Chill Zone.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-06)
+Código: RF-06
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-06
+Nombre: Realizar reserva
+Actor principal: Estudiante o Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 6. Diagrama de Caso de Uso: Realizar reserva (CU-06)
+El estudiante o administradorconsulta la disponibilidad de un recurso, selecciona fecha y
+hora, y realiza la reserva. El sistema valida la disponibilidad y envía una confirmación.
+17. Descripción General
+Este caso de uso permite a los estudiantes reservar recursos recreativos disponibles en el
+área Chill Zone (mesas, televisores, futbolines, etc.) por franjas horarias. La reserva queda
+registrada en el sistema y se notifica al usuario.
+18. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● El recurso debe estar disponible en la fecha y hora seleccionada.
+● No debe haber otra reserva activa del mismo usuario en ese horario.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo
+“Reservas”.
+Estudiante/A
+dministrador
+2 Consulta la disponibilidad del recurso deseado. Estudiante/A
+dministrador
+3 Selecciona fecha, hora y recurso. Estudiante/A
+dministrador
+4 El sistema valida que el recurso esté disponible. Sistema
+5 El Estudiante/Administrador confirma la reserva. Estudiante/A
+dministrador
+6 El sistema registra la reserva y envía confirmación. Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso ya está reservado, el sistema muestra: “No disponible en ese
+horario”.
+FA-02 Si el Estudiante/Administrador tiene otra reserva activa en el mismo
+horario, se muestra advertencia.
+FA-03 Si hay error de conexión se notifica al Estudiante/Administrador.
+21. Postcondiciones
+● La reserva queda registrada en la base de datos.
+● El Estudiante/Administrador recibe confirmación de la reserva.
+● El recurso queda marcado como reservado para ese horario.
+22. Reglas de Negocio
+● Un Estudiante/Administrador no puede tener más de una reserva activa en el
+mismo horario.
+● Las reservas deben realizarse con al menos 15 minutos de anticipación.
+● El sistema debe bloquear automáticamente los recursos reservados o en
+mantenimiento.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en reservas ≥ 95 % Pruebas funcionales
+Tiempo promedio de reserva ≤ 2 seg. Monitoreo del sistema
+Exactitud de disponibilidad ≥ 99 % Revisión de base de datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no disponible.
+● Conflicto de horarios con otra reserva.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-06 “Realizar reserva” es fundamental para la operatividad del sistema
+Chill Zone. Permite a los estudiantes gestionar su tiempo de recreación de forma
+organizada y eficiente, asegurando una experiencia fluida y controlada.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-07)
+Código: RF-07
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-07
+Nombre: Modificar reserva
+Actor principal: Estudiante o Administrador
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-02 – El sistema debe permitir reservar espacios y equipos
+por franjas horarias
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 7. Diagrama de Caso de Uso: Modificar reserva (CU-07)
+El estudiante o administrador accede a su historial de reservas, selecciona una reserva
+activa y modifica la fecha, hora o recurso. El sistema valida la disponibilidad y actualiza
+la información.
+17. Descripción General
+Este caso de uso permite a los estudiantes modificar una reserva previamente realizada,
+siempre que esté dentro del tiempo permitido y el recurso esté disponible en el nuevo
+horario.
+18. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una reserva activa que se pueda modificar.
+● El nuevo horario o recurso debe estar disponible.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El Estudiante/Administrador accede al módulo “Mis
+reservas”.
+Estudiante/A
+dministrador
+2 Selecciona la reserva que desea modificar. Estudiante/A
+dministrador
+3 El sistema muestra los detalles actuales de la reserva. Sistema
+4 El Estudiante/Administrador edita la fecha, hora o
+recurso.
+Estudiante/A
+dministrador
+5 El sistema valida la disponibilidad del nuevo horario. Sistema
+6 Si todo está correcto, actualiza la reserva. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si la reserva ya está en uso o finalizada, no se puede modificar.
+FA-02 Si el nuevo horario está ocupado, el sistema muestra: “No disponible”.
+FA-03 Si hay error de conexión se notifica al usuario.
+21. Postcondiciones
+● La reserva queda actualizada en la base de datos.
+22. Reglas de Negocio
+● Solo se pueden modificar reservas con al menos 15 minutos de anticipación.
+● No se puede modificar una reserva si el recurso está en mantenimiento.
+● El sistema debe validar que no haya conflictos con otras reservas.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de
+verificación
+Tasa de éxito en
+modificaciones
+≥ 95 % Pruebas funcionales
+Tiempo promedio de
+modificación
+≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o ya finalizada.
+● Conflicto de horarios con otra reserva.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reservas_disponibilidad
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-07 “Modificar reserva” mejora la flexibilidad del sistema Chill Zone,
+permitiendo a los estudiantes ajustar sus reservas según sus necesidades. Esto optimiza el
+uso de los recursos y mejora la experiencia del usuario.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-09)
+Código: RF-09
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-09
+Nombre: Registrar inicio de uso
+Actor principal: Estudiante
+Actores
+secundarios:
+Ninguno
+Requisitos
+asociados:
+RF-04 – El sistema debe permitir registrar el inicio y fin del
+uso de cada recurso
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 9. Diagrama de Caso de Uso: Registrar inicio de uso (CU-09)
+El estudiante llega al área Chill Zone, accede al sistema, selecciona su reserva activa y
+registra el inicio del uso del recurso. El sistema valida la reserva y marca el recurso como
+“en uso”.
+17. Descripción General
+Este caso de uso permite a los estudiantes registrar el momento en que comienzan a
+utilizar un recurso reservado en el área Chill Zone. Esto permite llevar un control preciso
+del tiempo de uso y la trazabilidad de los recursos.
+18. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una reserva activa para el recurso en ese momento.
+● El recurso debe estar disponible y no en mantenimiento.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El estudiante accede al módulo “Mis reservas activas”. Estudiante
+2 Selecciona la reserva correspondiente al recurso que va a usar. Estudiante
+3 El sistema valida que la reserva esté activa y dentro del horario
+permitido.
+Sistema
+4 El estudiante confirma el inicio del uso. Estudiante
+5 El sistema registra la hora de inicio y cambia el estado del
+recurso a “En uso”.
+Sistema
+6 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay una reserva activa, el sistema muestra: “No hay reservas activas
+para este recurso”.
+FA-02 Si el recurso está en mantenimiento, el sistema impide el inicio de uso.
+FA-03 Si hay error de conexión se notifica al usuario.
+21. Postcondiciones
+● El inicio de uso queda registrado en la base de datos.
+● El recurso cambia su estado a “En uso”.
+● Se activa el seguimiento del tiempo de uso.
+22. Reglas de Negocio
+● Solo se puede iniciar el uso dentro del horario reservado.
+● El sistema debe registrar la hora exacta de inicio.
+● No se puede iniciar el uso de un recurso sin una reserva activa.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros de inicio ≥ 98 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Reserva no encontrada o fuera del horario.
+● Recurso en mantenimiento o ya en uso.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-09 “Registrar inicio de uso” permite llevar un control preciso del uso
+de los recursos recreativos, asegurando que se respeten los horarios de reserva y se
+mantenga un historial confiable de uso por parte de los estudiantes.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-10)
+Código: RF-10
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-10
+Nombre: Registrar fin de uso
+Actor principal: Estudiante
+Actores secundarios: Ninguno
+Requisitos asociados: RF-04 – El sistema debe permitir registrar el inicio y fin del
+uso de cada recurso
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 10. Diagrama de Caso de Uso: Registrar fin de uso (CU-10)
+El estudiante accede al sistema, selecciona su sesión activa y confirma que ha terminado
+de usar el recurso. El sistema registra la hora de finalización y libera el recurso.
+17. Descripción General
+Este caso de uso permite a los estudiantes registrar el momento en que finalizan el uso de
+un recurso reservado. Esto permite liberar el recurso para otros usuarios y llevar un
+control del tiempo de uso.
+18. Precondiciones
+● El estudiante debe haber iniciado sesión.
+● Debe existir una sesión de uso activa registrada previamente (CU-09).
+● El recurso debe estar marcado como “En uso”.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El estudiante accede al módulo “Mis sesiones activas”. Estudiante
+2 Selecciona la sesión de uso que desea finalizar. Estudiante
+3 El sistema muestra los detalles de la sesión activa. Sistema
+4 El estudiante confirma el fin del uso. Estudiante
+5 El sistema registra la hora de finalización. Sistema
+6 El recurso cambia su estado a “Disponible”. Sistema
+7 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay una sesión activa, el sistema muestra: “No hay sesiones activas
+para finalizar”.
+FA-02 Si el recurso ya fue liberado automáticamente por tiempo expirado, se
+muestra advertencia.
+FA-03 Si hay error de conexión se notifica al usuario.
+21. Postcondiciones
+● El fin de uso queda registrado en la base de datos.
+● El recurso queda disponible para nuevas reservas.
+● Se calcula la duración total del uso.
+22. Reglas de Negocio
+● Solo se puede finalizar una sesión que esté activa.
+● El sistema debe registrar la hora exacta de finalización.
+● El tiempo de uso se calcula automáticamente y se asocia al usuario.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en registros de fin
+de uso
+≥ 98 % Pruebas funcionales
+Tiempo promedio de registro ≤ 2 seg. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Sesión no encontrada o ya finalizada.
+● Intento de finalizar una sesión fuera del horario permitido.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_control_uso
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-10 “Registrar fin de uso” permite cerrar correctamente las sesiones de
+uso de los recursos recreativos, asegurando un control preciso del tiempo utilizado y
+liberando los recursos para otros estudiantes.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-13)
+Código: RF-13
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-13
+Nombre: Editar Recurso
+Actor principal: Administrador
+Actores secundarios: Ninguno
+Requisitos asociados: RF-06 - El sistema debe permitir al administrador gestionar
+(agregar, editar, eliminar) recursos recreativos)
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 13. Diagrama de Caso de Uso: Editar recurso (CU-13)
+El administrador accede al módulo de gestión de recursos, consulta la lista de recursos
+existentes, selecciona uno y modifica sus datos. El sistema valida los cambios y actualiza
+la información.
+17. Descripción General
+Este caso de uso permite al administrador modificar la información de un recurso
+recreativo ya registrado en el sistema Chill Zone, como su nombre, tipo, estado, ubicación
+o disponibilidad.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● El recurso debe existir en el sistema.
+● El recurso no debe estar en uso al momento de la edición.
+19. Flujo Principal de Eventos
+Pas
+o
+Descripción de la acción Responsabl
+e
+1 El administrador accede al módulo “Gestión de recursos”. Administrad
+or
+2 Consulta la lista de recursos registrados. Sistema
+3 Selecciona el recurso que desea editar. Administrad
+or
+4 El sistema muestra los datos actuales del recurso. Sistema
+5 El administrador modifica los campos necesarios (nombre, tipo,
+estado, etc.).
+Administrad
+or
+6 El sistema valida los cambios. Sistema
+7 Si todo está correcto, actualiza la información en la base de
+datos.
+Sistema
+8 Se muestra mensaje de confirmación. Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si el recurso no existe, el sistema muestra: “Recurso no encontrado”.
+FA-02 Si el recurso está en uso, el sistema impide la edición.
+21. Postcondiciones
+● El recurso queda actualizado en la base de datos.
+● Los cambios se reflejan en los módulos de reservas y disponibilidad.
+22. Reglas de Negocio
+● Solo el administrador puede editar recursos.
+● No se puede modificar un recurso que esté en uso activo.
+● El sistema debe registrar un historial de cambios por cada edición.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en ediciones ≥ 95 % Pruebas funcionales
+Tiempo promedio de edición ≤ 2 min. Monitoreo del sistema
+Registro de cambios 100 % de
+ediciones
+registradas
+Revisión de logs
+25. Excepciones
+● Error de conexión con la base de datos.
+● Recurso no encontrado.
+● Intento de editar recurso en uso.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_gestion_recursos
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-13 “Editar recurso” permite mantener actualizada la información de
+los recursos recreativos, lo que garantiza una gestión eficiente y coherente con el estado
+real de los elementos disponibles en el área Chill Zone.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-15)
+Código: RF-15
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-15
+Nombre: Generar reporte de uso
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso (por
+recurso, usuario, fecha y horario)
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 15. Diagrama de Caso de Uso: Generar reporte de uso (CU-15)
+El administrador accede al módulo de reportes, selecciona filtros como fecha, recurso o
+usuario, y el sistema genera un informe detallado del uso registrado.
+17. Descripción General
+Este caso de uso permite al administrador generar reportes sobre el uso de los recursos
+recreativos del área Chill Zone. Los reportes pueden filtrarse por fechas, usuarios o tipo
+de recurso, y sirven para análisis y toma de decisiones.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir información registrada de uso en el sistema.
+● El sistema debe tener acceso a los datos históricos.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Reportes”. Administrador
+2 Selecciona el tipo de reporte: por recurso, por usuario, por
+fecha.
+Administrador
+3 Define los filtros necesarios (rango de fechas, tipo de recurso,
+etc.).
+Administrador
+4 El sistema consulta la base de datos y genera el reporte. Sistema
+20. Flujos Alternativos
+Código Descripción
+FA-01 Si no hay datos disponibles para los filtros seleccionados, el sistema
+muestra: “Sin resultados”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si el rango de fechas es inválido, el sistema solicita corrección.
+21. Postcondiciones
+● El reporte queda generado y disponible para consulta o exportación.
+22. Reglas de Negocio
+● Solo el administrador puede generar reportes.
+● Los reportes deben incluir fecha, hora, recurso y usuario
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+reportes
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión de base de
+datos
+25. Excepciones
+● Error de conexión con la base de datos.
+● Filtros inválidos o sin resultados.
+● Fallo en la exportación del archivo.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-15 “Generar reporte de uso” permite al administrador obtener
+información clave sobre el comportamiento de los usuarios y el uso de los recursos,
+facilitando la toma de decisiones y la mejora continua del área Chill Zone.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-17)
+Código: RF-17
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-17
+Nombre: Generar reporte de mantenimiento
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-05 – El sistema debe generar reportes de uso y
+mantenimiento
+Prioridad: Media
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 17. Diagrama de Caso de Uso: Generar reporte de mantenimiento (CU-17)
+El administrador accede al módulo de reportes, selecciona el tipo “mantenimiento”,
+define filtros como fechas o recursos.
+17. Descripción General
+Este caso de uso permite al administrador generar reportes sobre los mantenimientos
+realizados o pendientes en los recursos recreativos del área Chill Zone. El reporte incluye
+fechas, tipo de mantenimiento, estado del recurso y observaciones.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir historial de mantenimiento registrado.
+● El sistema debe tener acceso a los datos de recursos y sus estados.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Reportes”. Administrado
+r
+2 Selecciona el tipo de reporte: “Mantenimiento”. Administrado
+r
+3 Define filtros como rango de fechas, tipo de recurso o estado. Administrado
+r
+4 El sistema consulta la base de datos y genera el reporte. Sistema
+5 El reporte se muestra en pantalla con opción de exportar a PDF. Sistema
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si no hay datos disponibles, el sistema muestra: “Sin registros de
+mantenimiento”.
+FA-02 Si hay error de conexión, se muestra mensaje de reintento.
+FA-03 Si los filtros son inválidos, el sistema solicita corrección.
+21. Postcondiciones
+● El reporte queda generado y disponible para consulta o exportación.
+● Se registra la acción para trazabilidad.
+22. Reglas de Negocio
+● Solo el administrador puede generar reportes de mantenimiento.
+● Los reportes deben incluir fecha, recurso, tipo de mantenimiento y estado.
+● El sistema debe permitir exportar el reporte en formato PDF.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-03 Tiempo de respuesta < 2 segundos Rendimiento
+RNF-04 Seguridad de datos Seguridad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en generación de
+reportes
+≥ 98 % Pruebas funcionales
+Tiempo promedio de generación ≤ 2 seg. Monitoreo del sistema
+Precisión de datos ≥ 99 % Revisión cruzada con
+historial de
+mantenimiento
+25. Excepciones
+● Error de conexión con la base de datos.
+● Filtros inválidos o sin resultados.
+● Fallo en la exportación del archivo PDF.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_reportes_estadisticas
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-17 “Generar reporte de mantenimiento” permite al administrador tener
+control sobre el estado y seguimiento de los recursos recreativos, facilitando la
+planificación de reparaciones y la mejora continua del área Chill Zone.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Área recreativa Chill Zone
+Facultad de Ingeniería en Sistemas
+Documento de Caso de Uso Funcional (RF-19)
+Código: RF-19
+Proyecto: Sistema de Gestión para el área recreativa “Chill Zone” (SGCZ)
+Periodo: Septiembre 2025 - enero 2026
+Director: Ing. Carlos Parreño
+Página de Aprobación
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Damián
+Iza
+Cliente solicitante del
+proyecto
+Facultad de
+Ingeniería en
+Sistemas
+15. Identificación del Caso de Uso
+Elemento Descripción
+Código del Caso de
+Uso:
+CU-19
+Nombre: Administrar usuarios
+Actor principal: Administrador
+Actores secundarios: Sistema
+Requisitos asociados: RF-01 – El sistema debe permitir el registro y autenticación
+de usuarios
+Prioridad: Alta
+Versión: 1.0
+16. Diagrama de caso de Uso
+Figura 19. Diagrama de Caso de Uso: Administrar usuarios (CU-19)
+El administrador accede al módulo de usuarios, consulta la lista completa, puede editar
+datos, cambiar roles, bloquear usuarios según sea necesario.
+17. Descripción General
+Este caso de uso permite al administrador gestionar la información de los usuarios
+registrados en el sistema Chill Zone. Incluye funciones como consultar, editar, bloquear
+y cambiar roles de estudiantes o administradores.
+18. Precondiciones
+● El administrador debe haber iniciado sesión.
+● Debe existir al menos un usuario registrado en el sistema.
+● El sistema debe estar conectado a la base de datos.
+19. Flujo Principal de Eventos
+Paso Descripción de la acción Responsable
+1 El administrador accede al módulo “Administrar usuarios”. Administrador
+2 Consulta la lista de usuarios registrados. Sistema
+3 Selecciona un usuario para ver sus datos. Administrador
+4 Puede editar información como nombre, correo, rol o estado. Administrador
+5 El sistema valida los cambios y actualiza la base de datos. Sistema
+6 También puede bloquear usuarios si es necesario. Administrador
+20. Flujos Alternativos
+Códig
+o
+Descripción
+FA-01 Si el usuario no existe, el sistema muestra: “Usuario no encontrado”.
+FA-02 Si hay error de conexión, se guarda la acción y se sincroniza luego.
+21. Postcondiciones
+● Los datos del usuario quedan actualizados.
+● El usuario puede ser bloqueado o eliminado según las reglas del sistema.
+● Se conserva el historial de cambios para auditoría.
+22. Reglas de Negocio
+● Solo el administrador puede modificar usuarios.
+● Cada acción debe quedar registrada con fecha, hora y responsable.
+23. Requisitos No Funcionales Relacionados
+Código Descripción Tipo
+RNF-01 Interfaz intuitiva Usabilidad
+RNF-04 Seguridad de datos Seguridad
+RNF-06 Soporte para usuarios concurrentes Escalabilidad
+24. Métricas y Criterios de Aceptación
+Métrica Valor esperado Método de verificación
+Tasa de éxito en gestión de
+usuarios
+≥ 98 % Pruebas funcionales
+Tiempo promedio de edición o
+eliminación
+≤ 2 min. Monitoreo del sistema
+25. Excepciones
+● Error de conexión con la base de datos.
+● Usuario no encontrado.
+26. Observaciones Técnicas
+● MÓDULO TÉCNICO: módulo_administracion_general
+● LENGUAJE BACKEND: Python (Flask)
+● LENGUAJE FRONTEND: Bootstrap
+● BASE DE DATOS: MySQL
+27. Conclusiones
+El caso de uso CU-19 “Administrar usuarios” cierra el ciclo de gestión del sistema Chill
+Zone, permitiendo al administrador mantener el control sobre quién accede, cómo
+interactúan y qué permisos tienen dentro del sistema.
+28. Firmas de Cierre
+Nombre Cargo / Rol Institución Firma
+Ing. Carlos
+Parreño
+Director del Proyecto /
+Analista de Requisitos
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Jeremy
+Jácome
+Jefe del departamento de
+Software
+Facultad de
+Ingeniería en
+Sistemas
+Ing. Alberto
+Falconi
+Jefe del departamento de
+Calidad
+Facultad de
+Ingeniería en
+Sistemas

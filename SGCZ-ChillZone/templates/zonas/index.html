@@ -1,0 +1,130 @@
+{% extends 'layouts/adminlte_base.html' %}
+{% set title = 'Gestión de Zonas' %}
+{% block page_header %}
+<div class="row mb-2">
+  <div class="col-sm-6"><h1 class="m-0">Gestión de Zonas</h1></div>
+  <div class="col-sm-6"><ol class="breadcrumb float-sm-right"><li class="breadcrumb-item"><a href="{{ url_for('index') }}">Inicio</a></li><li class="breadcrumb-item active">Zonas</li></ol></div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-12">
+    <div class="card card-primary card-outline">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-map-marker-alt mr-2"></i>Listado de Zonas</h3>
+        <div class="card-tools">
+          <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalCrear">
+            <i class="fas fa-plus mr-1"></i> Nueva Zona
+          </button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for z in zonas %}
+              <tr>
+                <td><strong>{{ z.nombre }}</strong></td>
+                <td>{{ z.descripcion or '-' }}</td>
+                <td>
+                  <button class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#modalEditar" 
+                          data-id="{{ z.id }}" data-nombre="{{ z.nombre }}" data-descripcion="{{ z.descripcion }}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <form method="post" action="{{ url_for('zonas.eliminar', zona_id=z.id) }}" class="d-inline ml-1" onsubmit="return confirmAction(event, this, '¿Eliminar zona?', 'Esta acción no se puede deshacer. Asegúrate de que no tenga recursos asociados.')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                  </form>
+                </td>
+              </tr>
+            {% else %}
+              <tr><td colspan="3" class="text-center text-muted">No hay zonas registradas</td></tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="modalCrear" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">Nueva Zona</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <form method="post" action="{{ url_for('zonas.crear') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nombre de la Zona</label>
+            <input type="text" class="form-control" name="nombre" required>
+          </div>
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea class="form-control" name="descripcion" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-success">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Editar -->
+<div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Editar Zona</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <form method="post" id="formEditar">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nombre de la Zona</label>
+            <input type="text" class="form-control" name="nombre" id="editNombre" required>
+          </div>
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea class="form-control" name="descripcion" id="editDescripcion" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Actualizar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block extra_js %}
+<script>
+  $('#modalEditar').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data('id');
+    var nombre = button.data('nombre');
+    var descripcion = button.data('descripcion');
+    var modal = $(this);
+    modal.find('#editNombre').val(nombre);
+    modal.find('#editDescripcion').val(descripcion);
+    modal.find('#formEditar').attr('action', "{{ url_for('zonas.editar', zona_id=0) }}".replace('0', id));
+  });
+</script>
+{% endblock %}

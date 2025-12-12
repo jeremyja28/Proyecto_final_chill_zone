@@ -1,0 +1,12 @@
+services:
+  flask_app:
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./SGCZ-ChillZone:/app
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - FLASK_RUN_HOST=0.0.0.0
+      - PORT=4000

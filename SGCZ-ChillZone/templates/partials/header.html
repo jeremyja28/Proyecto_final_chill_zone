@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Principal">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/" aria-label="Inicio Chill Zone">
+      <span>Chill Zone</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegación">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      {% if current_user.id %}
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('reservas.index') }}">Reservas</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('uso.index') }}">Uso</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('recursos.index') }}">Recursos</a></li>
+    {% if current_user.rol == 'ADMIN' %}
+    <li class="nav-item"><a class="nav-link" href="{{ url_for('incidencias.index') }}">Incidencias</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('reportes.index') }}">Reportes</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.index') }}">Admin</a></li>
+  <li class="nav-item"><a class="nav-link" href="{{ url_for('sanciones.index') }}">Sanciones</a></li>
+        {% endif %}
+      </ul>
+      <span class="navbar-text text-white me-3">
+        {{ current_user.nombre }} ({{ current_user.rol }})
+      </span>
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm">Salir</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
