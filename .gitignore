@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+.env
+.venv/
+venv/
+ENV/
+.env*
+
+# Logs
+logs/
+SGCZ-ChillZone/logs/
+*.log
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node/npm
+node_modules/
+AdminLTE-3.2.0/node_modules/
+AdminLTE-3.2.0/build/
+AdminLTE-3.2.0/docs/_site/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+
+# Docker
+*.pid
+
+# Uploads and generated media
+static/uploads/
+
+# Cache
+.cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Misc
+*.swp
+
+# Large vendor directory (exclude if not needed for source control)
+AdminLTE-3.2.0/plugins/
+AdminLTE-3.2.0/images/
+AdminLTE-3.2.0/pages/
+AdminLTE-3.2.0/static/
