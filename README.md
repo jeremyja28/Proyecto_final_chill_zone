@@ -179,10 +179,10 @@ python app.py
 
 Después de importar `chill_zone_db.sql`, puedes acceder con las credenciales predeterminadas:
 
-| Rol          | Usuario             | Contraseña    |
-|--------------|---------------------|---------------|
-| Administrador | admin@chill.zone   | admin123      |
-| Usuario      | usuario@chill.zone  | user123       |
+| Rol          | Usuario                | Contraseña    |
+|--------------|------------------------|---------------|
+| Administrador | admin                 | admin123      |
+| Usuario      | est1@pucesa.edu.ec     | 12345678      |
 
 > **Importante**: Cambiar las contraseñas predeterminadas en producción.
 
