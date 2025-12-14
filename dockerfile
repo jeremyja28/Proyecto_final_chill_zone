@@ -21,3 +21,4 @@ ENV PORT=4000
 
 # Comando por defecto para correr la aplicación
 CMD ["python", "app.py"]
+#frvgfv
