@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, request, Response
 from utils.security import role_required
 from services.reportes_service import resumen_uso, exportar_csv, reservas_historial
 from services.estadisticas_service import resumen_general
-import json
 
 reportes_bp = Blueprint('reportes', __name__)
 

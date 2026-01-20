@@ -5,7 +5,6 @@ from utils.security import role_required
 from services.incidencias_service import (
     listar_incidencias_usuario, listar_incidencias_admin, recursos_disponibles, crear_incidencia, toggle_estado_incidencia
 )
-from config import Config
 
 incidencias_bp = Blueprint('incidencias', __name__)
 

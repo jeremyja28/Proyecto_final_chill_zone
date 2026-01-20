@@ -170,10 +170,6 @@ def contar_activas_por_recurso(recurso_id: int) -> int:
     return contar_reservas_activas_por_recurso(recurso_id)
 
 
-def contar_activas_por_recurso(recurso_id: int) -> int:
-    row = query_one("SELECT COUNT(1) AS c FROM reservas WHERE recurso_id=%s AND estado='ACTIVA'", (recurso_id,))
-    return int(row['c']) if row else 0
-
 def contar_activas_futuras_por_recurso(recurso_id: int) -> int:
     """Cantidad de reservas activas futuras (incluyendo hoy)."""
     row = query_one(
