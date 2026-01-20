@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app, jsonify
-from wtforms import Form, StringField, PasswordField, validators
 from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length, Email
 from services.auth_service import authenticate, start_password_recovery, verify_recovery_code, reset_password
 from utils.security import role_required, hash_password
@@ -9,6 +9,9 @@ import os
 from werkzeug.utils import secure_filename
 
 auth_bp = Blueprint('auth', __name__)
+
+# Código de verificación para recuperación (configurar en .env)
+_RECOVERY_CODE = os.getenv('RECOVERY_CODE', '270320')
 
 
 class LoginForm(FlaskForm):
@@ -161,7 +164,7 @@ def reset_password_api():
     code = data.get('code')
     password = data.get('password')
     
-    if str(code) != '270320':
+    if str(code) != _RECOVERY_CODE:
         return jsonify({'success': False, 'message': 'Código incorrecto'})
         
     if not email or not password:

@@ -49,18 +49,3 @@ def obtener_activo_por_reserva(reserva_id: int) -> Optional[Dict]:
 def contar_activos_por_recurso(recurso_id: int) -> int:
     """Alias para mantener compatibilidad con el servicio de recursos."""
     return contar_usos_activos_por_recurso(recurso_id)
-
-
-def obtener_activo_por_reserva(reserva_id: int):
-    sql = "SELECT * FROM uso WHERE reserva_id=%s AND hora_fin IS NULL ORDER BY hora_inicio DESC LIMIT 1"
-    return query_one(sql, (reserva_id,))
-
-
-def contar_activos_por_recurso(recurso_id: int) -> int:
-    sql = (
-        "SELECT COUNT(1) AS c FROM uso u "
-        "JOIN reservas r ON r.id=u.reserva_id "
-        "WHERE r.recurso_id=%s AND u.hora_fin IS NULL"
-    )
-    row = query_one(sql, (recurso_id,))
-    return int(row['c']) if row else 0

@@ -1,4 +1,5 @@
 from typing import Optional
+import os
 from utils.security import check_password, hash_password, generate_reset_token, verify_reset_token
 from repositories.user_repository import get_by_email, update_password, set_user_state
 from repositories.sancion_repository import listar_por_usuario, levantar
@@ -6,6 +7,9 @@ from datetime import datetime, timedelta
 from utils.logger import get_logger
 
 logger = get_logger()
+
+# Código de verificación para recuperación (configurar en .env)
+_RECOVERY_CODE = os.getenv('RECOVERY_CODE', '270320')
 
 
 def authenticate(email: str, password: str) -> Optional[dict]:
@@ -51,7 +55,7 @@ def start_password_recovery(email: str) -> bool:
 
 
 def verify_recovery_code(code: str) -> bool:
-    return code == '270320'
+    return code == _RECOVERY_CODE
 
 
 def reset_password(email: str, new_password: str) -> bool:
