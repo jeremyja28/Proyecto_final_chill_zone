@@ -22,6 +22,12 @@ def count_users() -> int:
     return int(row['c']) if row else 0
 
 
+def contar_admins_activos() -> int:
+    """Cuenta usuarios con rol ADMIN y estado ACTIVO."""
+    row = query_one("SELECT COUNT(1) as c FROM usuarios WHERE rol='ADMIN' AND estado='ACTIVO'")
+    return int(row['c']) if row else 0
+
+
 def create_user(nombre: str, apellido: str, correo: str, password_hash: bytes, rol: str = 'USUARIO', estado: str = 'ACTIVO') -> int:
     sql = """
     INSERT INTO usuarios (nombre, apellido, correo, hash_password, rol, estado)
