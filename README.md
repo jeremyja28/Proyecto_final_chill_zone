@@ -389,7 +389,7 @@ pytest tests/ -v
     <td align="center">
       <a href="https://github.com/jeremyja28">
         <img src="https://github.com/jeremyja28.png" width="100px;" alt="Jeremy"/><br />
-        <sub><b>Jeremy Jaramillo</b></sub>
+        <sub><b>Jeremy Jácome</b></sub>
       </a>
     </td>
   </tr>
