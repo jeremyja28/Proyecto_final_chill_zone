@@ -2,12 +2,19 @@ from typing import List, Dict, Optional
 from utils.db import query_all, query_one, execute
 
 
-def listar() -> List[Dict]:
-    sql = (
-        "SELECT r.*, z.nombre AS zona_nombre, z.id AS zona_id "
-        "FROM recursos r LEFT JOIN zonas z ON z.id=r.zona_id "
-        "WHERE r.eliminado = 0 ORDER BY z.nombre, r.nombre"
-    )
+def listar(incluir_deshabilitados: bool = False) -> List[Dict]:
+    if incluir_deshabilitados:
+        sql = (
+            "SELECT r.*, z.nombre AS zona_nombre, z.id AS zona_id "
+            "FROM recursos r LEFT JOIN zonas z ON z.id=r.zona_id "
+            "ORDER BY r.eliminado, z.nombre, r.nombre"
+        )
+    else:
+        sql = (
+            "SELECT r.*, z.nombre AS zona_nombre, z.id AS zona_id "
+            "FROM recursos r LEFT JOIN zonas z ON z.id=r.zona_id "
+            "WHERE r.eliminado = 0 ORDER BY z.nombre, r.nombre"
+        )
     return query_all(sql)
 
 
@@ -30,8 +37,27 @@ def editar(recurso_id: int, nombre: str, tipo: str, ubicacion: str, zona_id: int
 
 
 def eliminar_logico(recurso_id: int):
-    sql = "UPDATE recursos SET eliminado=1 WHERE id=%s"
+    """Deshabilita un recurso manualmente (sin marca de cascada zona)."""
+    sql = "UPDATE recursos SET eliminado=1, deshabilitado_por_zona=0 WHERE id=%s"
     execute(sql, (recurso_id,))
+
+
+def eliminar_logico_por_zona(recurso_id: int):
+    """Deshabilita un recurso por cascada de zona (con marca para restauración futura)."""
+    sql = "UPDATE recursos SET eliminado=1, deshabilitado_por_zona=1 WHERE id=%s"
+    execute(sql, (recurso_id,))
+
+
+def habilitar(recurso_id: int):
+    """Habilita un recurso (limpia cualquier marca de zona)."""
+    sql = "UPDATE recursos SET eliminado=0, deshabilitado_por_zona=0 WHERE id=%s"
+    execute(sql, (recurso_id,))
+
+
+def obtener_recursos_deshabilitados_por_zona(zona_id: int) -> List[Dict]:
+    """Obtiene recursos que fueron deshabilitados por cascada de zona (candidatos a restaurar)."""
+    sql = "SELECT id, nombre FROM recursos WHERE zona_id=%s AND eliminado=1 AND deshabilitado_por_zona=1"
+    return query_all(sql, (zona_id,))
 
 
 def cambiar_estado(recurso_id: int, estado: str, mant_inicio: str = None, mant_fin: str = None):

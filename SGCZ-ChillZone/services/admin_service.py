@@ -2,7 +2,7 @@ from typing import Tuple, List
 from datetime import datetime, timedelta
 import secrets
 import string
-from repositories.user_repository import list_users, count_users, update_role, block_user, get_by_email, create_user, get_by_id, set_user_state, update_password
+from repositories.user_repository import list_users, count_users, update_role, block_user, get_by_email, create_user, get_by_id, set_user_state, update_password, contar_admins_activos
 from repositories.config_repository import listar as conf_listar, guardar as conf_guardar, obtener as conf_obtener
 from repositories.sancion_repository import listar_por_usuario
 from repositories.reserva_repository import cancelar_por_bloqueo
@@ -17,6 +17,16 @@ def listar_usuarios() -> List[dict]:
 def actualizar_rol(user_id: int, rol: str) -> Tuple[bool, str]:
     if rol not in ('ADMIN', 'USUARIO'):
         return False, 'Rol inválido'
+    
+    usr = get_by_id(user_id)
+    if not usr:
+        return False, 'Usuario no encontrado'
+    
+    # Protección: no permitir degradar al único admin activo
+    if usr.get('rol') == 'ADMIN' and rol == 'USUARIO':
+        if contar_admins_activos() <= 1:
+            return False, 'No se puede degradar al único administrador del sistema.'
+    
     update_role(user_id, rol)
     return True, 'Rol actualizado'
 
@@ -26,6 +36,10 @@ def bloquear_usuario(user_id: int) -> Tuple[bool, str]:
     if not usr:
         return False, 'Usuario no encontrado'
     if usr.get('estado') == 'ACTIVO':
+        # Protección: no permitir desactivar al único admin activo
+        if usr.get('rol') == 'ADMIN' and contar_admins_activos() <= 1:
+            return False, 'No se puede desactivar al único administrador del sistema.'
+        
         set_user_state(user_id, 'BLOQUEADO')
         
         # Cancelar todas las reservas pendientes y activas del usuario

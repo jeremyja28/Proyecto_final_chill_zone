@@ -4,8 +4,8 @@ import repositories.reserva_repository as reserva_repo
 import repositories.uso_repository as uso_repo
 
 
-def listar_recursos() -> List[dict]:
-    return recurso_repo.listar()
+def listar_recursos(incluir_deshabilitados: bool = False) -> List[dict]:
+    return recurso_repo.listar(incluir_deshabilitados)
 
 
 def crear_recurso(data: dict) -> Tuple[bool, str]:
@@ -27,13 +27,37 @@ def editar_recurso(recurso_id: int, data: dict) -> Tuple[bool, str]:
 
 
 def eliminar_recurso(recurso_id: int) -> Tuple[bool, str]:
-    # No permitir eliminación si hay reservas activas o usos en curso (CU-14)
-    if reserva_repo.contar_activas_por_recurso(recurso_id) > 0:
-        return False, 'No se puede eliminar: existen reservas activas asociadas'
-    if uso_repo.contar_activos_por_recurso(recurso_id) > 0:
-        return False, 'No se puede eliminar: el recurso está en uso'
-    recurso_repo.eliminar_logico(recurso_id)
-    return True, 'Recurso eliminado'
+    """DEPRECADO: Usar toggle_habilitacion en su lugar."""
+    return toggle_habilitacion(recurso_id)
+
+
+def toggle_habilitacion(recurso_id: int) -> Tuple[bool, str]:
+    """Alterna el estado de habilitación de un recurso.
+    Al deshabilitar: cancela automáticamente todas las reservas PENDIENTE/ACTIVA.
+    Al habilitar: verifica que la zona padre esté activa primero."""
+    recurso = recurso_repo.obtener(recurso_id)
+    if not recurso:
+        return False, 'Recurso no encontrado'
+    
+    if recurso.get('eliminado') == 0:
+        # Deshabilitar: cancelar reservas pendientes/activas primero
+        recurso_nombre = recurso.get('nombre', 'Sin nombre')
+        motivo = f"El recurso '{recurso_nombre}' fue desactivado."
+        canceladas = reserva_repo.cancelar_por_deshabilitacion(recurso_id, motivo)
+        recurso_repo.eliminar_logico(recurso_id)
+        msg = 'Recurso deshabilitado'
+        if canceladas > 0:
+            msg += f'. Se cancelaron {canceladas} reserva(s) asociadas.'
+        return True, msg
+    else:
+        # HABILITAR: primero verificar que la zona esté activa
+        import repositories.zona_repository as zona_repo
+        zona = zona_repo.obtener(recurso.get('zona_id'))
+        if zona and zona.get('eliminado') == 1:
+            return False, f'No se puede habilitar el recurso. La zona "{zona.get("nombre")}" está deshabilitada. Primero active la zona.'
+        
+        recurso_repo.habilitar(recurso_id)
+        return True, 'Recurso habilitado'
 
 
 def cambiar_estado(recurso_id: int, estado: str, mant_inicio: str = None, mant_fin: str = None) -> Tuple[bool, str]:
@@ -46,10 +70,14 @@ def cambiar_estado(recurso_id: int, estado: str, mant_inicio: str = None, mant_f
     afectados = 0
     
     if estado == 'FUERA_DE_SERVICIO':
-        # Cancelar TODAS las reservas futuras inmediatamente
+        # Cancelar TODAS las reservas futuras inmediatamente con mensaje específico
         try:
-            afectados = reserva_repo_local.cancelar_futuras_por_recurso(recurso_id)
-        except Exception:
+            afectados = reserva_repo_local.cancelar_por_fuera_servicio(recurso_id)
+            print(f"DEBUG FUERA_DE_SERVICIO: recurso_id={recurso_id}, afectados={afectados}")
+        except Exception as e:
+            print(f"ERROR cancelar_por_fuera_servicio: {e}")
+            import traceback
+            traceback.print_exc()
             afectados = 0
         # Actualizar estado sin fechas (indefinido)
         recurso_repo.cambiar_estado(recurso_id, estado, None, None)

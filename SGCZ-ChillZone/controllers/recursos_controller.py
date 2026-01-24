@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from utils.security import role_required
-from services.recursos_service import listar_recursos, crear_recurso, editar_recurso, eliminar_recurso, cambiar_estado
+from services.recursos_service import listar_recursos, crear_recurso, editar_recurso, eliminar_recurso, cambiar_estado, toggle_habilitacion
 from services.zonas_service import listar_zonas
 from utils.audit import audit_log
 from utils.file_uploader import save_file
@@ -11,7 +11,9 @@ recursos_bp = Blueprint('recursos', __name__)
 @recursos_bp.route('/', methods=['GET'])
 @role_required('USUARIO', 'ADMIN')
 def index():
-    recursos = listar_recursos()
+    from flask import session
+    incluir_deshabilitados = session.get('rol') == 'ADMIN'
+    recursos = listar_recursos(incluir_deshabilitados)
     zonas = listar_zonas()
     return render_template('recursos/index.html', recursos=recursos, zonas=zonas)
 
@@ -56,13 +58,13 @@ def editar(recurso_id: int):
     return redirect(url_for('recursos.index'))
 
 
-@recursos_bp.route('/eliminar/<int:recurso_id>', methods=['POST'])
+@recursos_bp.route('/toggle/<int:recurso_id>', methods=['POST'])
 @role_required('ADMIN')
-def eliminar(recurso_id: int):
-    ok, msg = eliminar_recurso(recurso_id)
+def toggle(recurso_id: int):
+    ok, msg = toggle_habilitacion(recurso_id)
     flash(msg, 'success' if ok else 'danger')
     if ok:
-        audit_log('DELETE_RESOURCE', f'Recurso {recurso_id}', entity_id=recurso_id)
+        audit_log('TOGGLE_RESOURCE', f'Recurso {recurso_id}', entity_id=recurso_id, details={'mensaje': msg})
     return redirect(url_for('recursos.index'))
 
 

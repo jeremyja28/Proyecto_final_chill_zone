@@ -93,16 +93,89 @@ def marcar_finalizada(reserva_id: int):
     execute(sql, (reserva_id,))
 
 
-def cancelar_por_sancion(usuario_id: int) -> int:
+def cancelar_por_sancion(usuario_id: int, motivo: str = "Sanción aplicada al usuario") -> int:
     """Cancela todas las reservas PENDIENTE/ACTIVA de un usuario por sanción. Retorna cantidad cancelada."""
-    sql = "UPDATE reservas SET estado='CANCELADA_SANCION' WHERE usuario_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"
-    return execute(sql, (usuario_id,))
+    sql = """UPDATE reservas 
+             SET estado='CANCELADA_SANCION', 
+                 observacion = CONCAT(COALESCE(observacion, ''), ' [Auto-Cancelación: ', %s, ']')
+             WHERE usuario_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"""
+    return execute(sql, (motivo, usuario_id))
 
 
-def cancelar_por_bloqueo(usuario_id: int) -> int:
+def cancelar_por_bloqueo(usuario_id: int, motivo: str = "Usuario bloqueado del sistema") -> int:
     """Cancela todas las reservas PENDIENTE/ACTIVA de un usuario bloqueado. Retorna cantidad cancelada."""
-    sql = "UPDATE reservas SET estado='CANCELADA_SANCION' WHERE usuario_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"
-    return execute(sql, (usuario_id,))
+    sql = """UPDATE reservas 
+             SET estado='CANCELADA_SANCION',
+                 observacion = CONCAT(COALESCE(observacion, ''), ' [Auto-Cancelación: ', %s, ']')
+             WHERE usuario_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"""
+    return execute(sql, (motivo, usuario_id))
+
+
+def cancelar_por_recurso(recurso_id: int, motivo: str) -> int:
+    """Cancela reservas PENDIENTE/ACTIVA de un recurso con mensaje de motivo."""
+    # DEBUG: Primero ver qué reservas hay
+    from utils.db import query_all
+    reservas_check = query_all("SELECT id, estado, fecha FROM reservas WHERE recurso_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')", (recurso_id,))
+    print(f"DEBUG cancelar_por_recurso: recurso_id={recurso_id}, reservas encontradas={len(reservas_check)}")
+    for r in reservas_check:
+        print(f"  - reserva_id={r['id']}, estado={r['estado']}, fecha={r['fecha']}")
+    
+    # Intentar con columna observacion primero, si falla usar SQL simple
+    try:
+        sql = """UPDATE reservas 
+                 SET estado='CANCELADA',
+                     observacion = %s
+                 WHERE recurso_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"""
+        result = execute(sql, (motivo, recurso_id))
+    except Exception as e:
+        print(f"WARN: observacion column may not exist, using simple SQL: {e}")
+        # Fallback: SQL sin observacion
+        sql = """UPDATE reservas 
+                 SET estado='CANCELADA'
+                 WHERE recurso_id=%s AND estado IN ('PENDIENTE', 'ACTIVA')"""
+        result = execute(sql, (recurso_id,))
+    
+    print(f"DEBUG cancelar_por_recurso: filas afectadas={result}")
+    return result
+
+
+def cancelar_por_deshabilitacion(recurso_id: int, motivo: str = None) -> int:
+    """Cancela todas las reservas PENDIENTE/ACTIVA de un recurso deshabilitado. Retorna cantidad cancelada."""
+    if motivo is None:
+        motivo = "El recurso fue desactivado temporalmente."
+    return cancelar_por_recurso(recurso_id, motivo)
+
+
+def cancelar_por_mantenimiento(recurso_id: int, fecha_inicio: str = None, fecha_fin: str = None) -> int:
+    """Cancela reservas que chocan con periodo de mantenimiento."""
+    motivo = "El recurso entró en mantenimiento programado."
+    if fecha_inicio and fecha_fin:
+        try:
+            sql = """UPDATE reservas 
+                     SET estado='CANCELADA',
+                         observacion = %s
+                     WHERE recurso_id=%s 
+                     AND estado IN ('PENDIENTE', 'ACTIVA')
+                     AND fecha_hora_inicio < %s 
+                     AND fecha_hora_fin > %s"""
+            return execute(sql, (motivo, recurso_id, fecha_fin, fecha_inicio))
+        except Exception:
+            sql = """UPDATE reservas 
+                     SET estado='CANCELADA'
+                     WHERE recurso_id=%s 
+                     AND estado IN ('PENDIENTE', 'ACTIVA')
+                     AND fecha_hora_inicio < %s 
+                     AND fecha_hora_fin > %s"""
+            return execute(sql, (recurso_id, fecha_fin, fecha_inicio))
+    else:
+        return cancelar_por_recurso(recurso_id, motivo)
+
+
+def cancelar_por_fuera_servicio(recurso_id: int) -> int:
+    """Cancela todas las reservas de un recurso marcado como fuera de servicio."""
+    print(f"DEBUG cancelar_por_fuera_servicio: recurso_id={recurso_id}")
+    motivo = "El recurso fue marcado como fuera de servicio."
+    return cancelar_por_recurso(recurso_id, motivo)
 
 
 def agregar_acompanantes(reserva_id: int, usuario_ids: List[int]):

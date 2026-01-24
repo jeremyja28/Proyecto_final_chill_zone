@@ -59,4 +59,7 @@ def query_one(sql: str, params: tuple = ()):
 def execute(sql: str, params: tuple = ()): 
     with get_cursor() as cur:
         cur.execute(sql, params)
-        return cur.lastrowid
+        # For INSERT, return lastrowid; for UPDATE/DELETE, return rowcount
+        if sql.strip().upper().startswith('INSERT'):
+            return cur.lastrowid
+        return cur.rowcount
