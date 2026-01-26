@@ -76,7 +76,7 @@
                 data-ubicacion="{{ r.ubicacion }}" data-zona-id="{{ r.zona_id }}"><i class="fas fa-edit"></i></button>
               {% endif %}
               <form method="post" action="{{ url_for('recursos.toggle', recurso_id=r.id) }}" class="d-inline ml-1"
-                onsubmit="return confirm('{% if r.eliminado %}¿Habilitar recurso?{% else %}¿Deshabilitar recurso? Se cancelarán las reservas asociadas.{% endif %}')">
+                onsubmit="confirmAction(event, this, '{% if r.eliminado %}¿Habilitar recurso?{% else %}¿Deshabilitar recurso?{% endif %}', '{% if r.eliminado %}El recurso volverá a estar disponible.{% else %}Se cancelarán las reservas asociadas.{% endif %}', '{% if r.eliminado %}Sí, habilitar{% else %}Sí, deshabilitar{% endif %}')">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 {% if r.eliminado %}
                 <button class="btn btn-sm btn-outline-success" title="Habilitar"><i

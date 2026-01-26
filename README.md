@@ -24,21 +24,21 @@
   <a href="#-tecnologías">Tecnologías</a> •
   <a href="#-instalación">Instalación</a> •
   <a href="#-estructura-del-proyecto">Estructura</a> •
-  <a href="#-capturas-de-pantalla">Screenshots</a>
+  <a href="#-base-de-datos">Base de Datos</a>
 </p>
 
 ---
 
 ## 📖 Descripción
 
-El **Sistema de Gestión Chill Zone (SGCZ)** es una aplicación web integral diseñada para la administración y reserva de espacios recreativos y de trabajo colaborativo (Coworking) dentro de una institución. El sistema permite a los usuarios consultar la disponibilidad de recursos (mesas de ping pong, futbolines, billar, salas de estudio), realizar reservas y reportar incidencias. Para los administradores, ofrece herramientas para gestionar el inventario de recursos, controlar el acceso de usuarios, aplicar sanciones por mal uso y configurar parámetros del sistema.
+El **Sistema de Gestión Chill Zone (SGCZ)** es una aplicación web integral diseñada para la administración y reserva de espacios recreativos y de trabajo colaborativo (Coworking) dentro de una institución. El sistema permite a los usuarios consultar la disponibilidad de recursos, realizar reservas y reportar incidencias. Para los administradores, ofrece herramientas para gestionar el inventario, controlar accesos, aplicar sanciones y configurar parámetros del sistema con altos estándares de seguridad.
 
 ### 🎯 Objetivos Principales
-- 📅 **Reservas inteligentes** con validación de conflictos en tiempo real
-- 🛡️ **Sistema de sanciones** con duración automática según gravedad
-- 📊 **Dashboard analítico** con métricas de uso y estadísticas
-- 🔐 **Control de acceso** basado en roles (Usuario/Administrador)
-- 📱 **Diseño responsivo** completamente funcional en móviles
+- 📅 **Reservas inteligentes** con validación de conflictos en tiempo real.
+- 🛡️ **Seguridad Avanzada** con control de concurrencia (Optimistic Locking) y headers de seguridad.
+- 📊 **Dashboard analítico** con métricas de uso y estadísticas.
+- 🔐 **Control de acceso** basado en roles (Usuario/Administrador).
+- 📱 **Diseño responsivo** completamente funcional en móviles.
 
 ---
 
@@ -46,14 +46,14 @@ El **Sistema de Gestión Chill Zone (SGCZ)** es una aplicación web integral dis
 
 | Módulo | Descripción |
 |--------|-------------|
-| 🔐 **Autenticación y Roles** | Login seguro con bcrypt, roles USUARIO/ADMIN, recuperación de contraseña |
-| 📅 **Sistema de Reservas** | Reservas en tiempo real, detección de conflictos, acompañantes grupales |
-| 🏢 **Gestión de Zonas y Recursos** | CRUD completo, estados de mantenimiento, imágenes personalizadas |
-| 🛠️ **Incidencias** | Reportes con evidencia (imágenes/PDF), asignación de responsables |
-| ⚠️ **Sanciones** | Tipos LEVE/GRAVE/CRÍTICA, bloqueo automático, expiración automática |
-| 📊 **Dashboard Administrativo** | AdminLTE 3.2, gráficos Chart.js, métricas en tiempo real |
-| 📈 **Estadísticas y Reportes** | Análisis por zona/recurso/usuario, exportación CSV |
-| ⚙️ **Configuración Dinámica** | Horarios, duración de reservas, anticipación máxima |
+| 🔐 **Seguridad y Auditoría** | Autenticación robusta, RBAC estricto, **Bloqueo Optimista** para prevenir conflictos de edición, auditoría de acciones, protección CSRF y headers de seguridad (HSTS, X-Frame-Options). |
+| 📅 **Sistema de Reservas** | Reservas en tiempo real, detección automática de conflictos, gestión de acompañantes, cancelación automática por mantenimiento o sanciones. |
+| 🏢 **Gestión de Zonas y Recursos** | CRUD completo con validación de integridad, estados de mantenimiento programado, inhabilitación en cascada (Zona -> Recursos -> Reservas). |
+| 🛠️ **Incidencias** | Reportes detallados con evidencia multimedia, asignación de responsables y seguimiento de estado. |
+| ⚠️ **Sanciones** | Sistema de penalización con puntos, tipos (LEVE/GRAVE/CRÍTICA) y bloqueo automático de reservas. |
+| 📊 **Dashboard Administrativo** | AdminLTE 3.2, gráficos Chart.js, métricas en tiempo real de ocupación y uso. |
+| 📈 **Reportes y Estadísticas** | Análisis detallado por recurso/zona, historial de uso, tiempos de ocupación, exportación de datos. |
+| ⚙️ **Configuración Dinámica** | Ajuste en caliente de horarios, duración de reservas y ventanas de anticipación. |
 
 ---
 
@@ -66,67 +66,46 @@ Proyecto_final_chill_zone/
 │
 ├── 📂 SGCZ-ChillZone/              # 🚀 Aplicación principal Flask
 │   ├── 📜 app.py                   # Punto de entrada de la aplicación
-│   ├── 📜 config.py                # Configuración centralizada
+│   ├── 📜 config.py                # Configuración centralizada y seguridad
 │   ├── 📜 requirements.txt         # Dependencias Python
 │   │
-│   ├── 📂 controllers/             # 🎮 Controladores (rutas HTTP)
-│   │   ├── auth_controller.py      # Autenticación y sesiones
-│   │   ├── admin_controller.py     # Panel de administración
-│   │   ├── reservas_controller.py  # Gestión de reservas
-│   │   ├── recursos_controller.py  # CRUD de recursos
-│   │   ├── incidencias_controller.py
-│   │   ├── sanciones_controller.py
-│   │   ├── zonas_controller.py
-│   │   ├── reportes_controller.py
-│   │   └── estadisticas_controller.py
+│   ├── 📂 controllers/             # 🎮 Controladores (Blueprints)
+│   │   ├── auth_controller.py      # Autenticación
+│   │   ├── admin_controller.py     # Panel Admin
+│   │   ├── reservas_controller.py  # Lógica de reservas
+│   │   ├── recursos_controller.py  # Gestión de recursos
+│   │   ├── zonas_controller.py     # Gestión de zonas
+│   │   └── ... (otros controladores)
 │   │
-│   ├── 📂 services/                # 🧠 Lógica de negocio
-│   │   ├── auth_service.py         # Autenticación y recuperación
-│   │   ├── reservas_service.py     # Reglas de reservas
-│   │   ├── recursos_service.py     # Gestión de recursos
-│   │   ├── sanciones_service.py    # Sistema de sanciones
-│   │   ├── incidencias_service.py  # Gestión de incidencias
-│   │   ├── estadisticas_service.py # Métricas y estadísticas
-│   │   ├── metrics_service.py      # Dashboard admin
-│   │   └── reportes_service.py     # Generación de reportes
+│   ├── 📂 services/                # 🧠 Lógica de Negocio
+│   │   ├── reservas_service.py     # Reglas complejas de reserva
+│   │   ├── recursos_service.py     # Gestión de recursos con checksum
+│   │   ├── zonas_service.py        # Gestión de zonas con checksum
+│   │   └── ... (otros servicios)
 │   │
-│   ├── 📂 repositories/            # 💾 Acceso a datos (SQL)
+│   ├── 📂 repositories/            # 💾 Capa de Datos (SQL)
 │   │   ├── user_repository.py
 │   │   ├── reserva_repository.py
 │   │   ├── recurso_repository.py
-│   │   ├── incidencia_repository.py
-│   │   ├── sancion_repository.py
-│   │   ├── zona_repository.py
-│   │   ├── config_repository.py
-│   │   └── uso_repository.py
+│   │   └── ... (otros repositorios)
 │   │
-│   ├── 📂 models/                  # 📋 Modelos de datos (dataclasses)
-│   │   ├── user.py, reserva.py, recurso.py, incidencia.py, uso.py
+│   ├── 📂 models/                  # 📋 Definición de Modelos
 │   │
-│   ├── 📂 utils/                   # 🔧 Utilidades
-│   │   ├── db.py                   # Pool de conexiones MySQL
-│   │   ├── security.py             # Hash, tokens, decoradores
-│   │   ├── validators.py           # Validaciones de datos
-│   │   ├── logger.py               # Logging centralizado
-│   │   ├── audit.py                # Auditoría de acciones
-│   │   └── file_uploader.py        # Subida de archivos
+│   ├── 📂 utils/                   # 🔧 Utilidades Transversales
+│   │   ├── security_utils.py       # Hashing y control de concurrencia
+│   │   ├── db.py                   # Pool MySQL
+│   │   ├── security.py             # Decoradores RBAC
+│   │   └── ...
 │   │
-│   ├── 📂 templates/               # 🎨 Plantillas Jinja2
-│   │   ├── layouts/, auth/, admin/, reservas/, recursos/
-│   │   ├── incidencias/, sanciones/, zonas/, estadisticas/, reportes/
+│   ├── 📂 templates/               # 🎨 Vistas (Jinja2 + AdminLTE)
+│   ├── 📂 static/                  # 📦 Assets (CSS, JS, Imágenes)
 │   │
-│   ├── 📂 static/                  # 📦 Archivos estáticos
-│   │   ├── css/custom.css, js/main.js, img/resources/, uploads/
-│   │
-│   ├── 📂 tests/                   # 🧪 Tests unitarios (pytest)
-│   │
-│   └── 📂 docs/                    # 📚 Documentación técnica
+│   └── 📂 docs/                    # 📚 Documentación
 │
-├── 📂 AdminLTE-3.2.0/              # Framework de UI
-├── 📜 chill_zone_db.sql            # Script de base de datos
-├── 📜 docker-compose.yml           # Orquestación Docker
-├── 📜 dockerfile                   # Imagen Docker
-└── 📜 LICENSE                      # Licencia MIT
+├── 📂 AdminLTE-3.2.0/              # Framework UI Base
+├── 📜 chill_zone_db.sql            # Script DDL/DML Base de Datos
+├── 📜 docker-compose.yml           # Despliegue Docker
+└── 📜 LICENSE                      # Licencia
 ```
 
 ---
@@ -138,173 +117,66 @@ Proyecto_final_chill_zone/
 |------------|---------|-----------|
 | **Python** | 3.11+ | Lenguaje principal |
 | **Flask** | 3.0.3 | Framework web |
-| **MySQL Connector** | 9.0.0 | Conexión a base de datos |
-| **bcrypt** | 4.2.0 | Hash seguro de contraseñas |
-| **Flask-WTF** | 1.2.1 | Validación de formularios y CSRF |
-| **python-dotenv** | 1.0.1 | Variables de entorno |
+| **MySQL Connector** | 9.0.0 | Driver de base de datos |
+| **bcrypt** | 4.2.0 | Hashing de contraseñas |
+| **Flask-WTF** | 1.2.1 | Formularios y protección CSRF |
 
 ### Frontend
 | Tecnología | Versión | Propósito |
 |------------|---------|-----------|
-| **Jinja2** | 3.1.6 | Motor de plantillas |
-| **AdminLTE** | 3.2.0 | Interfaz administrativa |
-| **Bootstrap** | 4.x | Framework CSS |
-| **Chart.js** | - | Gráficos interactivos |
-| **DataTables** | - | Tablas dinámicas |
-
-### DevOps
-| Tecnología | Propósito |
-|------------|-----------|
-| **Docker** | Containerización |
-| **Docker Compose** | Orquestación de servicios |
-| **pytest** | Testing automatizado |
+| **Jinja2** | 3.1.6 | Renderizado de motor |
+| **AdminLTE** | 3.2.0 | Interfaz de usuario responsiva |
+| **Bootstrap** | 4.6 | Sistema de grillas y componentes |
+| **jQuery** | 3.x | Manipulación DOM y AJAX |
 
 ---
 
 ## 🚀 Instalación
 
 ### Prerrequisitos
-
-- **Python** 3.11 o superior
-- **MySQL** 8.0 o superior
+- **Python** 3.11+
+- **MySQL** 8.0+
 - **Git**
-- (Opcional) **Docker** y **Docker Compose**
 
-### Opción 1: Con Docker 🐳 (Recomendado)
+### Instalación Manual
 
-```bash
-# Clonar el repositorio
-git clone https://github.com/jeremyja28/Proyecto_final_chill_zone.git
-cd Proyecto_final_chill_zone
+1.  **Clonar el repositorio**
+    ```bash
+    git clone https://github.com/jeremyja28/Proyecto_final_chill_zone.git
+    cd Proyecto_final_chill_zone/SGCZ-ChillZone
+    ```
 
-# Levantar los servicios (Flask + MySQL)
-docker-compose up --build
-```
+2.  **Configurar entorno virtual**
+    ```bash
+    python -m venv venv
+    # Windows:
+    venv\Scripts\activate
+    # Linux/Mac:
+    source venv/bin/activate
+    ```
 
-🌐 **Acceder a la aplicación**: http://localhost:4000
+3.  **Instalar dependencias**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-#### Usando imagen Docker existente (con zona horaria Ecuador)
-```bash
-docker run -d -p 4000:4000 \
-  --name practica \
-  --add-host=host.docker.internal:host-gateway \
-  -e DB_HOST=host.docker.internal \
-  -e TZ=America/Guayaquil \
-  -e DB_PORT=3306 \
-  -e DB_USER=root \
-  -e DB_PASSWORD= \
-  jeremya28/practica:0.0.1.RELEASE
-```
+4.  **Configurar Base de Datos**
+    - Importar el script `chill_zone_db.sql` en MySQL.
+    - Configurar variables de entorno en `.env`:
+    ```env
+    DB_HOST=localhost
+    DB_USER=root
+    DB_PASSWORD=tu_password
+    DB_NAME=chill_zone_db
+    SECRET_KEY=clave_segura
+    ```
 
----
+5.  **Ejecutar**
+    ```bash
+    python app.py
+    ```
 
-### Opción 2: Instalación Manual
-
-#### 1️⃣ Clonar el repositorio
-
-```bash
-git clone https://github.com/jeremyja28/Proyecto_final_chill_zone.git
-cd Proyecto_final_chill_zone/SGCZ-ChillZone
-```
-
-#### 2️⃣ Crear entorno virtual
-
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
-
-# Linux/macOS
-python3 -m venv venv
-source venv/bin/activate
-```
-
-#### 3️⃣ Instalar dependencias
-
-```bash
-pip install -r requirements.txt
-```
-
-#### 4️⃣ Configurar variables de entorno
-
-```bash
-# Copiar archivo de ejemplo
-cp .env.example .env
-
-# Editar con tus credenciales
-```
-
-**Contenido de `.env`:**
-```env
-FLASK_ENV=development
-SECRET_KEY=tu-clave-secreta-super-segura-cambiar-en-produccion
-
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=chill_zone_db
-DB_USER=root
-DB_PASSWORD=tu_password_mysql
-```
-
-#### 5️⃣ Restaurar la base de datos
-
-```bash
-mysql -u root -p < ../chill_zone_db.sql
-```
-
-#### 6️⃣ Ejecutar la aplicación
-
-```bash
-python app.py
-```
-
-🌐 **Acceder a la aplicación**: http://localhost:5000
-
----
-
-### 🔑 Credenciales de Acceso por Defecto
-
-| Rol | Usuario | Contraseña |
-|-----|---------|------------|
-| 👑 Administrador | `admin` | `admin123` |
-| 👤 Usuario | `est1@pucesa.edu.ec` | `12345678` |
-
-> ⚠️ **Importante**: Cambiar las contraseñas predeterminadas en producción.
-
----
-
-## 🖼️ Capturas de Pantalla
-
-### 🏠 Landing Page
-<!-- TODO: Agregar captura de pantalla -->
-![Landing Page](docs/screenshots/landing.png)
-
-### 🔐 Inicio de Sesión
-<!-- TODO: Agregar captura de pantalla -->
-![Login](docs/screenshots/login.png)
-
-### 📊 Dashboard Administrativo
-<!-- TODO: Agregar captura de pantalla -->
-![Dashboard Admin](docs/screenshots/dashboard_admin.png)
-
-### 📅 Sistema de Reservas
-<!-- TODO: Agregar captura de pantalla -->
-![Reservas](docs/screenshots/reservas.png)
-
-### 🗓️ Disponibilidad de Recursos
-<!-- TODO: Agregar captura de pantalla -->
-![Disponibilidad](docs/screenshots/disponibilidad.png)
-
----
-
-## 🧪 Tests
-
-Ejecutar la suite de tests con pytest:
-
-```bash
-cd SGCZ-ChillZone
-pytest tests/ -v
-```
+Acceder en `http://localhost:5000`
 
 ---
 
@@ -312,71 +184,42 @@ pytest tests/ -v
 
 | ID | Caso de Uso | Estado |
 |----|-------------|--------|
-| CU-01 | Autenticación de usuarios | ✅ |
-| CU-02 | Gestión de reservas | ✅ |
-| CU-03 | Consulta de disponibilidad | ✅ |
-| CU-04 | Cancelación de reservas | ✅ |
-| CU-05 | Gestión de recursos | ✅ |
-| CU-06 | Reporte de incidencias | ✅ |
-| CU-07 | Gestión de sanciones | ✅ |
-| CU-08 | Dashboard administrativo | ✅ |
-| CU-09 | Estadísticas y reportes | ✅ |
-| CU-10 | Gestión de zonas | ✅ |
-| CU-11 | Configuración del sistema | ✅ |
-| CU-12 | Auditoría de acciones | ✅ |
-| CU-13 | Gestión de usuarios (Admin) | ✅ |
-| CU-14 | Protección de eliminación de recursos | ✅ |
+| CU-01 | Autenticación y Autorización | ✅ |
+| CU-02 | Gestión de Perfil de Usuario | ✅ |
+| CU-03 | Visualización de Disponibilidad | ✅ |
+| CU-04 | Crear Reserva (Individual/Grupal) | ✅ |
+| CU-05 | Cancelar Reserva | ✅ |
+| CU-06 | Gestión de Recursos (Admin) | ✅ |
+| CU-07 | Gestión de Zonas (Admin) | ✅ |
+| CU-08 | Reporte y Gestión de Incidencias | ✅ |
+| CU-09 | Aplicación de Sanciones | ✅ |
+| CU-10 | Panel de Estadísticas | ✅ |
+| CU-11 | Auditoría de Seguridad | ✅ |
+| CU-12 | Configuración del Sistema | ✅ |
 
 ---
 
 ## 🗄️ Base de Datos
 
+El sistema utiliza una base de datos relacional MySQL con la siguiente estructura normalizada:
+
 ### Tablas Principales
+
 | Tabla | Descripción |
 |-------|-------------|
-| `usuarios` | Información de usuarios (nombre, correo, contraseña, rol, estado) |
-| `recursos` | Catálogo de ítems reservables (mesas, salas, equipos) |
-| `reservas` | Registro central de reservas (quién, qué, cuándo) |
-| `incidencias` | Reportes de problemas asociados a recursos |
-| `sanciones` | Registro de penalizaciones aplicadas |
-| `zonas` | Áreas macro donde se ubican los recursos |
-| `config_sistema` | Variables de configuración dinámica |
+| **usuarios** | Almacena credenciales, roles y estado de los usuarios. |
+| **zonas** | Áreas físicas (ej. Chill Zone, Coworking) que agrupan recursos. |
+| **recursos** | Ítems reservables con control de estado, mantenimiento y stock. |
+| **reservas** | Registro transaccional de reservas. Estados: PENDIENTE, ACTIVA, FINALIZADA, CANCELADA. |
+| **reserva_acompanantes** | Detalle de usuarios adicionales en una reserva grupal. |
+| **incidencias** | Reportes de daños o problemas, con evidencia adjunta. |
+| **incidencia_responsables** | Usuarios asignados o responsables de una incidencia. |
+| **sanciones** | Historial de penalizaciones aplicadas por administradores. |
+| **uso** | Registro de tiempos reales de ocupación de recursos. |
+| **config_sistema** | Parámetros globales configurables (horarios, límites, timeouts). |
 
-### Arquitectura
-
-```
-┌──────────────────┐
-│   Templates      │  ← Jinja2 (HTML)
-│   (Frontend)     │
-└────────┬─────────┘
-         │
-┌────────▼─────────┐
-│   Controllers    │  ← Blueprints (Rutas HTTP)
-└────────┬─────────┘
-         │
-┌────────▼─────────┐
-│    Services      │  ← Lógica de Negocio
-└────────┬─────────┘
-         │
-┌────────▼─────────┐
-│  Repositories    │  ← Acceso a Datos (SQL)
-└────────┬─────────┘
-         │
-┌────────▼─────────┐
-│   MySQL DB       │  ← Base de Datos
-└──────────────────┘
-```
-
----
-
-## 🔮 Mejoras Futuras
-
-- [ ] Implementación de notificaciones por correo electrónico
-- [ ] Sistema de chat en tiempo real para usuarios
-- [ ] Integración con calendarios externos (Google Calendar, Outlook)
-- [ ] Aplicación móvil nativa (Android/iOS)
-- [ ] Sistema de QR para check-in/check-out automático
-- [ ] API RESTful documentada con Swagger
+### Vistas
+- **v_disponibilidad**: Vista optimizada para consultar disponibilidad de recursos en tiempo real y calcular franjas horarias ocupadas.
 
 ---
 
@@ -396,9 +239,9 @@ pytest tests/ -v
 </table>
 
 ### Agradecimientos
-- **AdminLTE** - Framework de dashboard administrativo
-- **Flask Community** - Framework web ligero y extensible
-- **PUCESA** - Institución educativa
+- **AdminLTE** - Framework UI
+- **Flask Community**
+- **PUCESA**
 
 ---
 
@@ -410,8 +253,4 @@ Este proyecto está bajo la licencia **MIT**. Consulta el archivo [LICENSE](LICE
 
 <p align="center">
   <sub>Hecho con ❤️ para la gestión eficiente de espacios recreativos</sub>
-</p>
-
-<p align="center">
-  <a href="#-chill-zone---sistema-de-gestión-de-zonas-recreativas">⬆️ Volver al inicio</a>
 </p>

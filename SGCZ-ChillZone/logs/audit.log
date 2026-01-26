@@ -92,3 +92,6 @@
 {"ts": "2026-01-24T18:42:37Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 3", "entity_id": 3, "details": {"mensaje": "Recurso deshabilitado"}}
 {"ts": "2026-01-24T18:42:47Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 3", "entity_id": 3, "details": {"mensaje": "Recurso habilitado"}}
 {"ts": "2026-01-24T18:42:51Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 4", "entity_id": 4, "details": {"mensaje": "Recurso deshabilitado. Se cancelaron 1 reserva(s) asociadas."}}
+{"ts": "2026-01-26T01:23:35Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 10", "entity_id": 10, "details": {"mensaje": "Recurso deshabilitado"}}
+{"ts": "2026-01-26T01:23:39Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 10", "entity_id": 10, "details": {"mensaje": "Recurso habilitado"}}
+{"ts": "2026-01-26T01:23:41Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 4", "entity_id": 4, "details": {"mensaje": "Recurso habilitado"}}
