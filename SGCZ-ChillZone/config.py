@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -13,6 +14,13 @@ class Config:
     DB_NAME = os.getenv('DB_NAME', 'chill_zone_db')
     DB_USER = os.getenv('DB_USER', 'root')
     DB_PASSWORD = os.getenv('DB_PASSWORD', '')
+
+    # Session Security
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = False  # Cambiar a True en producción con HTTPS
+    PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
+
 
     # CSRF
     WTF_CSRF_TIME_LIMIT = None

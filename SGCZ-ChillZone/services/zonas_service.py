@@ -1,16 +1,30 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 import repositories.zona_repository as zona_repo
 import repositories.recurso_repository as recurso_repo
 import repositories.reserva_repository as reserva_repo
 from utils.db import query_all
+from utils.security_utils import generar_hash_entidad, verificar_checksum
 
 
 def listar_zonas(incluir_deshabilitados: bool = False) -> List[Dict]:
     return zona_repo.listar(incluir_deshabilitados)
 
 
-def obtener_zona(zona_id: int) -> Dict:
-    return zona_repo.obtener(zona_id)
+def obtener_zona(zona_id: int, incluir_checksum: bool = False) -> Optional[Dict]:
+    """
+    Obtiene una zona por ID.
+    
+    Args:
+        zona_id: ID de la zona
+        incluir_checksum: Si True, inyecta _checksum para control de concurrencia
+    
+    Returns:
+        Dict con datos de la zona (+ _checksum si solicitado), o None si no existe.
+    """
+    zona = zona_repo.obtener(zona_id)
+    if zona and incluir_checksum:
+        zona['_checksum'] = generar_hash_entidad(zona)
+    return zona
 
 
 def crear_zona(nombre: str, descripcion: str, imagen_url: str = None) -> Tuple[bool, str]:
@@ -23,9 +37,32 @@ def crear_zona(nombre: str, descripcion: str, imagen_url: str = None) -> Tuple[b
         return False, f"Error al crear zona: {str(e)}"
 
 
-def actualizar_zona(zona_id: int, nombre: str, descripcion: str, imagen_url: str = None) -> Tuple[bool, str]:
+def actualizar_zona(zona_id: int, nombre: str, descripcion: str, imagen_url: str = None, checksum_original: str = None) -> Tuple[bool, str]:
+    """
+    Actualiza una zona con validación de concurrencia optimista.
+    
+    Args:
+        zona_id: ID de la zona a actualizar
+        nombre: Nuevo nombre
+        descripcion: Nueva descripción
+        imagen_url: Nueva URL de imagen (opcional)
+        checksum_original: Hash del estado cuando el usuario abrió el formulario.
+                          Si no coincide con el actual, se rechaza la edición.
+    
+    Returns:
+        Tuple (success: bool, message: str)
+    """
     if not nombre:
         return False, "El nombre es obligatorio"
+    
+    # Verificación de concurrencia optimista
+    if checksum_original:
+        zona_actual = zona_repo.obtener(zona_id)
+        if not zona_actual:
+            return False, 'Zona no encontrada'
+        if not verificar_checksum(zona_actual, checksum_original):
+            return False, 'Error de integridad: Alguien más ha modificado este registro mientras lo editabas. Por favor, recarga la página y vuelve a intentarlo.'
+    
     try:
         zona_repo.actualizar(zona_id, nombre, descripcion, imagen_url)
         return True, "Zona actualizada exitosamente"

@@ -40,7 +40,9 @@ def editar(zona_id):
     imagen = request.files.get('imagen')
     imagen_url = save_file(imagen, 'zonas') if imagen else None
     
-    ok, msg = actualizar_zona(zona_id, nombre, descripcion, imagen_url)
+    checksum_original = request.form.get('checksum_original')
+    
+    ok, msg = actualizar_zona(zona_id, nombre, descripcion, imagen_url, checksum_original)
     flash(msg, 'success' if ok else 'danger')
     return redirect(url_for('zonas.index'))
 
@@ -80,14 +82,15 @@ def recursos_restaurables(zona_id):
 @role_required('ADMIN')
 def obtener(zona_id):
     """API endpoint para obtener datos de zona (para modal AJAX)."""
-    zona = obtener_zona(zona_id)
+    zona = obtener_zona(zona_id, incluir_checksum=True)
     if zona:
         return jsonify({
             'id': zona.get('id'),
             'nombre': zona.get('nombre'),
             'descripcion': zona.get('descripcion'),
             'imagen_url': zona.get('imagen_url'),
-            'eliminado': zona.get('eliminado', 0)
+            'eliminado': zona.get('eliminado', 0),
+            '_checksum': zona.get('_checksum')
         })
     return jsonify({'error': 'Zona no encontrada'}), 404
 

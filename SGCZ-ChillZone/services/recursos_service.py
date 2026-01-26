@@ -1,11 +1,25 @@
-from typing import Tuple, List
+from typing import Tuple, List, Optional, Dict
 import repositories.recurso_repository as recurso_repo
 import repositories.reserva_repository as reserva_repo
 import repositories.uso_repository as uso_repo
+from utils.security_utils import generar_hash_entidad, verificar_checksum
 
 
 def listar_recursos(incluir_deshabilitados: bool = False) -> List[dict]:
     return recurso_repo.listar(incluir_deshabilitados)
+
+
+def obtener_recurso_con_checksum(recurso_id: int) -> Optional[Dict]:
+    """
+    Obtiene un recurso por ID e inyecta su checksum para control de concurrencia.
+    
+    Returns:
+        Dict con datos del recurso + '_checksum', o None si no existe.
+    """
+    recurso = recurso_repo.obtener(recurso_id)
+    if recurso:
+        recurso['_checksum'] = generar_hash_entidad(recurso)
+    return recurso
 
 
 def crear_recurso(data: dict) -> Tuple[bool, str]:
@@ -17,11 +31,32 @@ def crear_recurso(data: dict) -> Tuple[bool, str]:
     return True, 'Recurso creado'
 
 
-def editar_recurso(recurso_id: int, data: dict) -> Tuple[bool, str]:
+def editar_recurso(recurso_id: int, data: dict, checksum_original: str = None) -> Tuple[bool, str]:
+    """
+    Edita un recurso con validación de concurrencia optimista.
+    
+    Args:
+        recurso_id: ID del recurso a editar
+        data: Datos nuevos del recurso
+        checksum_original: Hash del estado cuando el usuario abrió el formulario.
+                          Si no coincide con el actual, se rechaza la edición.
+    
+    Returns:
+        Tuple (success: bool, message: str)
+    """
     if not data.get('nombre'):
         return False, 'Nombre requerido'
     if not data.get('zona_id'):
         return False, 'Zona requerida'
+    
+    # Verificación de concurrencia optimista
+    if checksum_original:
+        recurso_actual = recurso_repo.obtener(recurso_id)
+        if not recurso_actual:
+            return False, 'Recurso no encontrado'
+        if not verificar_checksum(recurso_actual, checksum_original):
+            return False, 'Error de integridad: Alguien más ha modificado este registro mientras lo editabas. Por favor, recarga la página y vuelve a intentarlo.'
+    
     recurso_repo.editar(recurso_id, data['nombre'], data.get('tipo', ''), data.get('ubicacion', ''), data['zona_id'], data.get('imagen_url'))
     return True, 'Recurso actualizado'
 
