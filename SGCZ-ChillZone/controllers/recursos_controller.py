@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from utils.security import role_required
-from services.recursos_service import listar_recursos, crear_recurso, editar_recurso, eliminar_recurso, cambiar_estado, toggle_habilitacion
+from services.recursos_service import listar_recursos, crear_recurso, editar_recurso, eliminar_recurso, cambiar_estado, toggle_habilitacion, obtener_recurso_con_checksum
 from services.zonas_service import listar_zonas
 from utils.audit import audit_log
 from utils.file_uploader import save_file
@@ -51,11 +51,33 @@ def editar(recurso_id: int):
         'zona_id': request.form.get('zona_id'),
         'imagen_url': imagen_url
     }
-    ok, msg = editar_recurso(recurso_id, data)
+    
+    # Capturar checksum para validación de concurrencia
+    checksum_original = request.form.get('checksum_original')
+    
+    ok, msg = editar_recurso(recurso_id, data, checksum_original)
     flash(msg, 'success' if ok else 'danger')
     if ok:
         audit_log('EDIT_RESOURCE', data.get('nombre'), entity_id=recurso_id, details=data)
     return redirect(url_for('recursos.index'))
+
+
+@recursos_bp.route('/obtener/<int:recurso_id>', methods=['GET'])
+@role_required('ADMIN')
+def obtener(recurso_id: int):
+    """API endpoint para obtener datos de recurso con checksum (para modal AJAX)."""
+    recurso = obtener_recurso_con_checksum(recurso_id)
+    if recurso:
+        return jsonify({
+            'id': recurso.get('id'),
+            'nombre': recurso.get('nombre'),
+            'tipo': recurso.get('tipo'),
+            'ubicacion': recurso.get('ubicacion'),
+            'zona_id': recurso.get('zona_id'),
+            'imagen_url': recurso.get('imagen_url'),
+            '_checksum': recurso.get('_checksum')
+        })
+    return jsonify({'error': 'Recurso no encontrado'}), 404
 
 
 @recursos_bp.route('/toggle/<int:recurso_id>', methods=['POST'])

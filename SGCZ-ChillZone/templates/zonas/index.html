@@ -250,6 +250,21 @@
       modal.find('#editImagenPreview').hide();
       modal.find('#noImageText').show();
     }
+
+    // AJAX para obtener checksum actualizado
+    var urlObtener = "{{ url_for('zonas.obtener', zona_id=0) }}".replace(/0$/, id);
+    $.get(urlObtener, function (data) {
+      if (data._checksum) {
+        if ($('#edit_checksum').length === 0) {
+          $('<input>').attr({
+            type: 'hidden',
+            id: 'edit_checksum',
+            name: 'checksum_original'
+          }).appendTo('#formEditar');
+        }
+        $('#edit_checksum').val(data._checksum);
+      }
+    });
   });
 
   // Botón Habilitar - Mostrar modal con opciones

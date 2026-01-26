@@ -269,6 +269,23 @@
       modal.find('#edit_tipo').val(button.data('tipo'));
       modal.find('#edit_ubicacion').val(button.data('ubicacion'));
       modal.find('#edit_zona_id').val(button.data('zona-id'));
+      modal.find('#edit_zona_id').val(button.data('zona-id'));
+      
+      // AJAX para obtener checksum actualizado
+      var urlObtener = "{{ url_for('recursos.obtener', recurso_id=0) }}".replace(/0$/, id);
+      $.get(urlObtener, function(data) {
+          if(data._checksum) {
+              if($('#edit_checksum').length === 0) {
+                  $('<input>').attr({
+                      type: 'hidden',
+                      id: 'edit_checksum',
+                      name: 'checksum_original'
+                  }).appendTo('#formEditar');
+              }
+              $('#edit_checksum').val(data._checksum);
+          }
+      });
+
       // Fix Bug 405: Actualizar action del formulario dinámicamente
       var baseUrl = "{{ url_for('recursos.editar', recurso_id=0) }}";
       modal.find('#formEditar').attr('action', baseUrl.replace(/0$/, id));
