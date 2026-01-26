@@ -64,7 +64,7 @@
                   </button>
                   <!-- Botón Deshabilitar -->
                   <form method="post" action="{{ url_for('zonas.deshabilitar', zona_id=z.id) }}" class="d-inline ml-1"
-                    onsubmit="return confirm('¿Deshabilitar zona?\n\nTODOS los recursos de esta zona serán deshabilitados y sus reservas activas/pendientes canceladas.')">
+                    onsubmit="confirmAction(event, this, '¿Deshabilitar zona?', 'TODOS los recursos de esta zona serán deshabilitados y sus reservas activas/pendientes canceladas.', 'Sí, deshabilitar')">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <button class="btn btn-sm btn-outline-danger" title="Deshabilitar zona"><i
                         class="fas fa-ban"></i></button>
