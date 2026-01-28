@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from utils.security import role_required
-from services.admin_service import listar_usuarios, actualizar_rol, bloquear_usuario, leer_config, guardar_config, registrar_usuario, resetear_password_usuario
+from services.admin_service import listar_usuarios, actualizar_rol, bloquear_usuario, leer_config, guardar_config, registrar_usuario, resetear_password_usuario, actualizar_usuario
 from services.reservas_service import listar_todas_reservas, cancelar_reserva_admin
 from services.incidencias_service import crear_incidencia
 from utils.audit import audit_log
@@ -107,6 +107,22 @@ def crear_usuario():
     usuarios = listar_usuarios()
     form_prefill = {'nombre': nombre, 'apellido': apellido, 'correo': correo, 'rol': rol}
     return render_template('admin/usuarios.html', usuarios=usuarios, form_prefill=form_prefill)
+
+
+@admin_bp.route('/usuarios/editar/<int:user_id>', methods=['POST'])
+@role_required('ADMIN')
+def editar_usuario(user_id: int):
+    nombre = request.form.get('nombre')
+    apellido = request.form.get('apellido')
+    correo = request.form.get('correo')
+    
+    ok, msg = actualizar_usuario(user_id, nombre, apellido, correo)
+    flash(msg, 'success' if ok else 'danger')
+    
+    if ok:
+        audit_log('UPDATE_USER', correo, entity_id=user_id, details={'nombre': nombre, 'apellido': apellido})
+        
+    return redirect(url_for('admin.index'))
 
 
 @admin_bp.route('/reservas', methods=['GET'])

@@ -2,7 +2,7 @@ from typing import Tuple, List
 from datetime import datetime, timedelta
 import secrets
 import string
-from repositories.user_repository import list_users, count_users, update_role, block_user, get_by_email, create_user, get_by_id, set_user_state, update_password, contar_admins_activos
+from repositories.user_repository import list_users, count_users, update_role, block_user, get_by_email, create_user, get_by_id, set_user_state, update_password, contar_admins_activos, update_user_basic_info
 from repositories.config_repository import listar as conf_listar, guardar as conf_guardar, obtener as conf_obtener
 from repositories.sancion_repository import listar_por_usuario
 from repositories.reserva_repository import cancelar_por_bloqueo
@@ -130,3 +130,23 @@ def resetear_password_usuario(user_id: int) -> Tuple[bool, str]:
     update_password(user_id, pwd_hash)
     
     return True, f'Contraseña restablecida: {new_password}'
+
+
+def actualizar_usuario(user_id: int, nombre: str, apellido: str, correo: str) -> Tuple[bool, str]:
+    if not nombre or not apellido or not correo:
+        return False, 'Nombre, apellido y correo son obligatorios'
+    
+    if not is_valid_email(correo):
+        return False, 'Correo inválido'
+
+    user = get_by_id(user_id)
+    if not user:
+        return False, 'Usuario no encontrado'
+
+    # Verificar si el correo ya existe en otro usuario
+    otro = get_by_email(correo)
+    if otro and otro['id'] != user_id:
+        return False, 'El correo ya está en uso por otro usuario'
+
+    update_user_basic_info(user_id, nombre, apellido, correo)
+    return True, 'Usuario actualizado correctamente'

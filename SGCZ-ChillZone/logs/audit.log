@@ -95,3 +95,8 @@
 {"ts": "2026-01-26T01:23:35Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 10", "entity_id": 10, "details": {"mensaje": "Recurso deshabilitado"}}
 {"ts": "2026-01-26T01:23:39Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 10", "entity_id": 10, "details": {"mensaje": "Recurso habilitado"}}
 {"ts": "2026-01-26T01:23:41Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "TOGGLE_RESOURCE", "subject": "Recurso 4", "entity_id": 4, "details": {"mensaje": "Recurso habilitado"}}
+{"ts": "2026-01-26T12:26:18Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "CREATE_RESOURCE", "subject": "Fut", "entity_id": null, "details": {"nombre": "Fut", "tipo": "JUEGO", "ubicacion": "A lado  del coliseo", "zona_id": "1", "imagen_url": "/static/uploads/recursos/5a8f77a478614f1197764db05602d424_Icono_chat_bot.png"}}
+{"ts": "2026-01-27T16:14:58Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "UPDATE_USER", "subject": "carlos@pucesa.edu.ec", "entity_id": 3, "details": {"nombre": "Carlitos", "apellido": "Parreñoooo"}}
+{"ts": "2026-01-27T16:15:38Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "UPDATE_USER", "subject": "carlos1@pucesa.edu.ec", "entity_id": 3, "details": {"nombre": "Carlos", "apellido": "Parreño"}}
+{"ts": "2026-01-27T16:16:18Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "UPDATE_USER", "subject": "carlos@pucesa.edu.ec", "entity_id": 3, "details": {"nombre": "Carlos", "apellido": "Parreño"}}
+{"ts": "2026-01-27T16:16:22Z", "user_id": 1, "rol": "ADMIN", "ip": "127.0.0.1", "event": "ADMIN_RESET_PASSWORD", "subject": "Usuario 3", "entity_id": 3, "details": {}}

@@ -60,6 +60,11 @@ def update_profile_image(user_id: int, image_url: str):
     execute(sql, (image_url, user_id))
 
 
+def update_user_basic_info(user_id: int, nombre: str, apellido: str, correo: str):
+    sql = "UPDATE usuarios SET nombre = %s, apellido = %s, correo = %s WHERE id = %s"
+    execute(sql, (nombre, apellido, correo, user_id))
+
+
 def buscar_usuarios(query: str) -> List[Dict]:
     term = f"%{query}%"
     sql = """

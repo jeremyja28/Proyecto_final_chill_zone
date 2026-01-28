@@ -4652,3 +4652,127 @@ Traceback (most recent call last):
     current_app.login_manager._load_user()
     ^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'Flask' object has no attribute 'login_manager'
+2026-01-26 07:23:18,377 ERROR Error interno del servidor
+Traceback (most recent call last):
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\network.py", line 758, in open_connection
+    self.sock.connect(sockaddr)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\controllers\auth_controller.py", line 38, in login
+    user = authenticate(form.email.data.strip(), form.password.data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\services\auth_service.py", line 16, in authenticate
+    user = get_by_email(email)
+           ^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\repositories\user_repository.py", line 7, in get_by_email
+    return query_one(sql, (email,))
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 54, in query_one
+    with get_cursor() as cur:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 35, in get_cursor
+    with get_conn() as conn:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 26, in get_conn
+    init_pool()
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 11, in init_pool
+    _pool = pooling.MySQLConnectionPool(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 490, in __init__
+    self.add_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 613, in add_connection
+    cnx = connect(**self._cnx_config)  # type: ignore[assignment]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 323, in connect
+    return MySQLConnection(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\connection.py", line 179, in __init__
+    self.connect(**kwargs)
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\abstracts.py", line 1399, in connect
+    self._open_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\connection.py", line 357, in _open_connection
+    self._socket.open_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\network.py", line 760, in open_connection
+    raise InterfaceError(
+mysql.connector.errors.InterfaceError: 2003: Can't connect to MySQL server on 'localhost:3307' (10061 No connection could be made because the target machine actively refused it)
+2026-01-26 07:23:25,198 ERROR Error interno del servidor
+Traceback (most recent call last):
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\network.py", line 758, in open_connection
+    self.sock.connect(sockaddr)
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\controllers\auth_controller.py", line 38, in login
+    user = authenticate(form.email.data.strip(), form.password.data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\services\auth_service.py", line 16, in authenticate
+    user = get_by_email(email)
+           ^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\repositories\user_repository.py", line 7, in get_by_email
+    return query_one(sql, (email,))
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 54, in query_one
+    with get_cursor() as cur:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 35, in get_cursor
+    with get_conn() as conn:
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\contextlib.py", line 137, in __enter__
+    return next(self.gen)
+           ^^^^^^^^^^^^^^
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 26, in get_conn
+    init_pool()
+  File "c:\Users\chanc\OneDrive\Documentos\GitHub\Proyecto_final_chill_zone\SGCZ-ChillZone\utils\db.py", line 11, in init_pool
+    _pool = pooling.MySQLConnectionPool(
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 490, in __init__
+    self.add_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 613, in add_connection
+    cnx = connect(**self._cnx_config)  # type: ignore[assignment]
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\pooling.py", line 323, in connect
+    return MySQLConnection(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\connection.py", line 179, in __init__
+    self.connect(**kwargs)
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\abstracts.py", line 1399, in connect
+    self._open_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\connection.py", line 357, in _open_connection
+    self._socket.open_connection()
+  File "C:\Users\chanc\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\mysql\connector\network.py", line 760, in open_connection
+    raise InterfaceError(
+mysql.connector.errors.InterfaceError: 2003: Can't connect to MySQL server on 'localhost:3307' (10061 No connection could be made because the target machine actively refused it)

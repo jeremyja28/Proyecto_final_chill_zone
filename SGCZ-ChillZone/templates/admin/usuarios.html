@@ -12,6 +12,64 @@
     </ol>
   </div>
 </div>
+
+<!-- Modal Editar Usuario -->
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" role="dialog" aria-labelledby="modalEditarUsuarioLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formEditarUsuario" method="post" action=""
+        onsubmit="return confirmAction(event, this, '¿Guardar cambios?', 'Se actualizará la información del usuario.')">
+        <div class="modal-body">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+          <div class="form-group">
+            <label for="edit_nombre">Nombre <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="edit_nombre" name="nombre" required>
+          </div>
+          <div class="form-group">
+            <label for="edit_apellido">Apellido <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="edit_apellido" name="apellido" required>
+          </div>
+          <div class="form-group">
+            <label for="edit_correo">Correo electrónico <span class="text-danger">*</span></label>
+            <input type="email" class="form-control" id="edit_correo" name="correo" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('#modalEditarUsuario').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget);
+      var id = button.data('id');
+      var nombre = button.data('nombre');
+      var apellido = button.data('apellido');
+      var correo = button.data('correo');
+
+      var modal = $(this);
+      modal.find('#edit_nombre').val(nombre);
+      modal.find('#edit_apellido').val(apellido);
+      modal.find('#edit_correo').val(correo);
+
+      // Actualizar la acción del formulario
+      var actionUrl = "{{ url_for('admin.editar_usuario', user_id=0) }}".replace('0', id);
+      modal.find('#formEditarUsuario').attr('action', actionUrl);
+    });
+  });
+</script>
 {% endblock %}
 {% block content %}
 <div class="row">
@@ -114,6 +172,11 @@
                     <button class="btn btn-sm btn-outline-warning" title="Resetear Contraseña"><i
                         class="fas fa-key"></i></button>
                   </form>
+                  <button type="button" class="btn btn-sm btn-outline-info ml-1" title="Editar Usuario"
+                    data-toggle="modal" data-target="#modalEditarUsuario" data-id="{{ u.id }}"
+                    data-nombre="{{ u.nombre }}" data-apellido="{{ u.apellido }}" data-correo="{{ u.correo }}">
+                    <i class="fas fa-edit"></i>
+                  </button>
                 </td>
               </tr>
               {% else %}
